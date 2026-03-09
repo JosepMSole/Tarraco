@@ -1,0 +1,508 @@
+{
+  "version": "1.0",
+  "project": "tarraco-romana-minigame",
+  "default_language": "es",
+  "supported_languages": ["es", "en", "ca"],
+  "questions": [
+    {
+      "id": "Q001",
+      "number": 1,
+      "category": "city_identity",
+      "difficulty": "easy",
+      "correct_answer": "A",
+      "final_question_eligible": true,
+      "status": "verified",
+      "content": {
+        "es": {
+          "question": "¿Cómo se llamaba en época romana la actual ciudad de Tarragona?",
+          "options": {
+            "A": "Tarraco",
+            "B": "Emerita Augusta",
+            "C": "Barcino",
+            "D": "Caesaraugusta"
+          },
+          "explanation": "La actual Tarragona se llamaba Tarraco en época romana."
+        },
+        "en": {
+          "question": "What was the Roman name of present-day Tarragona?",
+          "options": {
+            "A": "Tarraco",
+            "B": "Emerita Augusta",
+            "C": "Barcino",
+            "D": "Caesaraugusta"
+          },
+          "explanation": "Present-day Tarragona was called Tarraco in Roman times."
+        },
+        "ca": {
+          "question": "Com s'anomenava en època romana l'actual ciutat de Tarragona?",
+          "options": {
+            "A": "Tarraco",
+            "B": "Emerita Augusta",
+            "C": "Barcino",
+            "D": "Caesaraugusta"
+          },
+          "explanation": "L'actual Tarragona s'anomenava Tarraco en època romana."
+        }
+      },
+      "source": {
+        "title": "Archaeological Ensemble of Tarraco",
+        "author": "UNESCO World Heritage Centre",
+        "publisher": "UNESCO",
+        "url": "https://whc.unesco.org/en/list/875/",
+        "accessed": "2026-03-09"
+      },
+      "source_type": "institution",
+      "notes_internal": "Pregunta básica de identificación de la ciudad."
+    },
+    {
+      "id": "Q002",
+      "number": 2,
+      "category": "province_administration",
+      "difficulty": "easy",
+      "correct_answer": "B",
+      "final_question_eligible": true,
+      "status": "verified",
+      "content": {
+        "es": {
+          "question": "¿De qué provincia romana fue capital Tarraco durante el Alto Imperio?",
+          "options": {
+            "A": "Lusitania",
+            "B": "Hispania Citerior",
+            "C": "Baetica",
+            "D": "Gallaecia"
+          },
+          "explanation": "Tarraco fue capital de la provincia Hispania Citerior y uno de los principales centros administrativos de la Hispania romana."
+        },
+        "en": {
+          "question": "Of which Roman province was Tarraco the capital during the High Empire?",
+          "options": {
+            "A": "Lusitania",
+            "B": "Hispania Citerior",
+            "C": "Baetica",
+            "D": "Gallaecia"
+          },
+          "explanation": "Tarraco was the capital of Hispania Citerior and one of the main administrative centres of Roman Hispania."
+        },
+        "ca": {
+          "question": "De quina província romana va ser capital Tàrraco durant l'Alt Imperi?",
+          "options": {
+            "A": "Lusitània",
+            "B": "Hispania Citerior",
+            "C": "Bètica",
+            "D": "Gallaecia"
+          },
+          "explanation": "Tàrraco va ser capital de la província Hispania Citerior i un dels principals centres administratius de la Hispània romana."
+        }
+      },
+      "source": {
+        "title": "Archaeological Ensemble of Tarraco",
+        "author": "UNESCO World Heritage Centre",
+        "publisher": "UNESCO",
+        "url": "https://whc.unesco.org/en/list/875/",
+        "accessed": "2026-03-09"
+      },
+      "source_type": "institution",
+      "notes_internal": "Provincia principal asociada a Tarraco en la bibliografía patrimonial."
+    },
+    {
+      "id": "Q003",
+      "number": 3,
+      "category": "archaeology_heritage",
+      "difficulty": "easy",
+      "correct_answer": "C",
+      "final_question_eligible": true,
+      "status": "verified",
+      "content": {
+        "es": {
+          "question": "¿En qué año fue declarado Patrimonio Mundial por la UNESCO el Conjunto Arqueológico de Tarraco?",
+          "options": {
+            "A": "1992",
+            "B": "1998",
+            "C": "2000",
+            "D": "2004"
+          },
+          "explanation": "La UNESCO declaró el Conjunto Arqueológico de Tarraco Patrimonio Mundial el 30 de noviembre de 2000."
+        },
+        "en": {
+          "question": "In what year was the Archaeological Ensemble of Tarraco declared a UNESCO World Heritage Site?",
+          "options": {
+            "A": "1992",
+            "B": "1998",
+            "C": "2000",
+            "D": "2004"
+          },
+          "explanation": "UNESCO declared the Archaeological Ensemble of Tarraco a World Heritage Site on 30 November 2000."
+        },
+        "ca": {
+          "question": "En quin any va ser declarat Patrimoni Mundial per la UNESCO el Conjunt Arqueològic de Tàrraco?",
+          "options": {
+            "A": "1992",
+            "B": "1998",
+            "C": "2000",
+            "D": "2004"
+          },
+          "explanation": "La UNESCO va declarar el Conjunt Arqueològic de Tàrraco Patrimoni Mundial el 30 de novembre de 2000."
+        }
+      },
+      "source": {
+        "title": "Archaeological Ensemble of Tarraco",
+        "author": "UNESCO World Heritage Centre",
+        "publisher": "UNESCO",
+        "url": "https://whc.unesco.org/en/list/875/",
+        "accessed": "2026-03-09"
+      },
+      "source_type": "institution",
+      "notes_internal": "Fecha clave de patrimonio mundial."
+    },
+    {
+      "id": "Q004",
+      "number": 4,
+      "category": "circus",
+      "difficulty": "easy",
+      "correct_answer": "D",
+      "final_question_eligible": false,
+      "status": "verified",
+      "content": {
+        "es": {
+          "question": "¿Para qué tipo de espectáculos se construyó principalmente el circo romano de Tarraco?",
+          "options": {
+            "A": "Combates de gladiadores",
+            "B": "Representaciones teatrales",
+            "C": "Debates políticos",
+            "D": "Carreras de carros"
+          },
+          "explanation": "El circo romano se destinaba principalmente a las carreras de carros, uno de los espectáculos más populares del mundo romano."
+        },
+        "en": {
+          "question": "What type of spectacles was the Roman circus of Tarraco mainly built for?",
+          "options": {
+            "A": "Gladiator fights",
+            "B": "Theatrical performances",
+            "C": "Political debates",
+            "D": "Chariot races"
+          },
+          "explanation": "The Roman circus was mainly used for chariot races, one of the most popular spectacles in the Roman world."
+        },
+        "ca": {
+          "question": "Per a quin tipus d'espectacles es va construir principalment el circ romà de Tàrraco?",
+          "options": {
+            "A": "Combats de gladiadors",
+            "B": "Representacions teatrals",
+            "C": "Debats polítics",
+            "D": "Curses de carros"
+          },
+          "explanation": "El circ romà es destinava principalment a les curses de carros, un dels espectacles més populars del món romà."
+        }
+      },
+      "source": {
+        "title": "Circ romà",
+        "author": "Museu d'Història de Tarragona",
+        "publisher": "Ajuntament de Tarragona",
+        "url": "https://www.tarragona.cat/patrimoni/museu-historia/monuments/el-circ-roma",
+        "accessed": "2026-03-09"
+      },
+      "source_type": "museum",
+      "notes_internal": "Pregunta muy directa sobre la función del circo."
+    },
+    {
+      "id": "Q005",
+      "number": 5,
+      "category": "amphitheatre",
+      "difficulty": "medium",
+      "correct_answer": "B",
+      "final_question_eligible": true,
+      "status": "verified",
+      "content": {
+        "es": {
+          "question": "¿Qué obispo cristiano fue martirizado en el anfiteatro de Tarraco en el año 259 d. C.?",
+          "options": {
+            "A": "San Isidoro",
+            "B": "San Fructuoso",
+            "C": "San Leandro",
+            "D": "San Paciano"
+          },
+          "explanation": "En el anfiteatro de Tarraco fueron martirizados en 259 d. C. el obispo Fructuoso y sus diáconos Augurio y Eulogio."
+        },
+        "en": {
+          "question": "Which Christian bishop was martyred in the amphitheatre of Tarraco in AD 259?",
+          "options": {
+            "A": "Saint Isidore",
+            "B": "Saint Fructuosus",
+            "C": "Saint Leander",
+            "D": "Saint Pacian"
+          },
+          "explanation": "In AD 259, Bishop Fructuosus and his deacons Augurius and Eulogius were martyred in the amphitheatre of Tarraco."
+        },
+        "ca": {
+          "question": "Quin bisbe cristià va ser martiritzat a l'amfiteatre de Tàrraco l'any 259 dC?",
+          "options": {
+            "A": "Sant Isidor",
+            "B": "Sant Fructuós",
+            "C": "Sant Leandre",
+            "D": "Sant Pacià"
+          },
+          "explanation": "A l'amfiteatre de Tàrraco hi van ser martiritzats l'any 259 dC el bisbe Fructuós i els seus diaques Auguri i Eulogi."
+        }
+      },
+      "source": {
+        "title": "Roman Amphitheatre",
+        "author": "Museu d'Història de Tarragona",
+        "publisher": "Tarragona Turisme / Ajuntament de Tarragona",
+        "url": "https://www.tarragonaturisme.cat/en/monument/roman-amphitheatre-mht",
+        "accessed": "2026-03-09"
+      },
+      "source_type": "museum",
+      "notes_internal": "Buena pregunta histórica con fuerte vínculo local."
+    },
+    {
+      "id": "Q006",
+      "number": 6,
+      "category": "walls",
+      "difficulty": "easy",
+      "correct_answer": "A",
+      "final_question_eligible": false,
+      "status": "verified",
+      "content": {
+        "es": {
+          "question": "¿Qué monumento de Tarraco se considera la construcción romana conservada más antigua de la ciudad?",
+          "options": {
+            "A": "Las murallas",
+            "B": "El anfiteatro",
+            "C": "El teatro",
+            "D": "El foro de la colonia"
+          },
+          "explanation": "Las murallas son el monumento romano conservado más antiguo de Tarraco y una de las primeras grandes construcciones del asentamiento."
+        },
+        "en": {
+          "question": "Which monument of Tarraco is considered the oldest preserved Roman construction in the city?",
+          "options": {
+            "A": "The walls",
+            "B": "The amphitheatre",
+            "C": "The theatre",
+            "D": "The colony forum"
+          },
+          "explanation": "The walls are the oldest preserved Roman monument in Tarraco and one of the first major constructions of the settlement."
+        },
+        "ca": {
+          "question": "Quin monument de Tàrraco es considera la construcció romana conservada més antiga de la ciutat?",
+          "options": {
+            "A": "Les muralles",
+            "B": "L'amfiteatre",
+            "C": "El teatre",
+            "D": "El fòrum de la colònia"
+          },
+          "explanation": "Les muralles són el monument romà conservat més antic de Tàrraco i una de les primeres grans construccions de l'assentament."
+        }
+      },
+      "source": {
+        "title": "Les muralles",
+        "author": "Museu d'Història de Tarragona",
+        "publisher": "Ajuntament de Tarragona",
+        "url": "https://www.tarragona.cat/patrimoni/museu-historia/monuments/les-muralles",
+        "accessed": "2026-03-09"
+      },
+      "source_type": "museum",
+      "notes_internal": "Pregunta patrimonial básica."
+    },
+    {
+      "id": "Q007",
+      "number": 7,
+      "category": "walls",
+      "difficulty": "medium",
+      "correct_answer": "C",
+      "final_question_eligible": false,
+      "status": "verified",
+      "content": {
+        "es": {
+          "question": "Aproximadamente, ¿cuántos metros de la muralla romana de Tarraco se conservan hoy en día?",
+          "options": {
+            "A": "300 metros",
+            "B": "700 metros",
+            "C": "1.100 metros",
+            "D": "2.500 metros"
+          },
+          "explanation": "De la muralla romana de Tarraco se conservan hoy aproximadamente 1.100 metros visitables o reconocibles."
+        },
+        "en": {
+          "question": "Approximately how many metres of the Roman wall of Tarraco are preserved today?",
+          "options": {
+            "A": "300 metres",
+            "B": "700 metres",
+            "C": "1,100 metres",
+            "D": "2,500 metres"
+          },
+          "explanation": "Around 1,100 metres of the Roman wall of Tarraco are preserved today."
+        },
+        "ca": {
+          "question": "Aproximadament, quants metres de la muralla romana de Tàrraco es conserven avui dia?",
+          "options": {
+            "A": "300 metres",
+            "B": "700 metres",
+            "C": "1.100 metres",
+            "D": "2.500 metres"
+          },
+          "explanation": "De la muralla romana de Tàrraco se'n conserven avui aproximadament 1.100 metres."
+        }
+      },
+      "source": {
+        "title": "The Walls (Archaeological Promenade)",
+        "author": "Museu d'Història de Tarragona",
+        "publisher": "Tarragona Turisme / Ajuntament de Tarragona",
+        "url": "https://www.tarragonaturisme.cat/en/monument/walls-archaeological-promenade-mht",
+        "accessed": "2026-03-09"
+      },
+      "source_type": "museum",
+      "notes_internal": "Dato cuantitativo útil para diversidad."
+    },
+    {
+      "id": "Q008",
+      "number": 8,
+      "category": "infrastructure",
+      "difficulty": "easy",
+      "correct_answer": "B",
+      "final_question_eligible": false,
+      "status": "verified",
+      "content": {
+        "es": {
+          "question": "¿Con qué otro nombre popular se conoce el acueducto de les Ferreres?",
+          "options": {
+            "A": "Puente de Augusto",
+            "B": "Puente del Diablo",
+            "C": "Puente de Trajano",
+            "D": "Puente de Escipión"
+          },
+          "explanation": "El acueducto de les Ferreres es conocido popularmente como Pont del Diable o Puente del Diablo."
+        },
+        "en": {
+          "question": "By what other popular name is the Les Ferreres aqueduct known?",
+          "options": {
+            "A": "Augustus Bridge",
+            "B": "Devil's Bridge",
+            "C": "Trajan's Bridge",
+            "D": "Scipio's Bridge"
+          },
+          "explanation": "The Les Ferreres aqueduct is popularly known as the Pont del Diable or Devil's Bridge."
+        },
+        "ca": {
+          "question": "Amb quin altre nom popular es coneix l'aqüeducte de les Ferreres?",
+          "options": {
+            "A": "Pont d'August",
+            "B": "Pont del Diable",
+            "C": "Pont de Trajà",
+            "D": "Pont d'Escipió"
+          },
+          "explanation": "L'aqüeducte de les Ferreres és conegut popularment com a Pont del Diable."
+        }
+      },
+      "source": {
+        "title": "Les Ferreres Aqueduct / Pont del Diable Bridge",
+        "author": "Museu d'Història de Tarragona",
+        "publisher": "Tarragona Turisme / Ajuntament de Tarragona",
+        "url": "https://www.tarragonaturisme.cat/en/monument/les-ferreres-aqueductpont-del-diable-bridge-mht",
+        "accessed": "2026-03-09"
+      },
+      "source_type": "museum",
+      "notes_internal": "Nombre popular muy reconocible."
+    },
+    {
+      "id": "Q009",
+      "number": 9,
+      "category": "theatre",
+      "difficulty": "medium",
+      "correct_answer": "C",
+      "final_question_eligible": false,
+      "status": "verified",
+      "content": {
+        "es": {
+          "question": "¿Dónde se encontraba el teatro romano de Tarraco dentro de la ciudad?",
+          "options": {
+            "A": "Junto a las murallas del recinto superior",
+            "B": "Dentro del anfiteatro",
+            "C": "Entre el foro local y el puerto",
+            "D": "Encima del acueducto"
+          },
+          "explanation": "El teatro de Tarraco se construyó entre el foro local y el puerto, en una de las zonas más activas de la ciudad romana."
+        },
+        "en": {
+          "question": "Where was the Roman theatre of Tarraco located within the city?",
+          "options": {
+            "A": "Next to the walls of the upper enclosure",
+            "B": "Inside the amphitheatre",
+            "C": "Between the local forum and the port",
+            "D": "On top of the aqueduct"
+          },
+          "explanation": "The theatre of Tarraco was built between the local forum and the port, in one of the liveliest areas of the Roman city."
+        },
+        "ca": {
+          "question": "On es trobava el teatre romà de Tàrraco dins de la ciutat?",
+          "options": {
+            "A": "Al costat de les muralles del recinte superior",
+            "B": "Dins de l'amfiteatre",
+            "C": "Entre el fòrum local i el port",
+            "D": "Damunt de l'aqüeducte"
+          },
+          "explanation": "El teatre de Tàrraco es va construir entre el fòrum local i el port, en una de les zones més actives de la ciutat romana."
+        }
+      },
+      "source": {
+        "title": "Theater of Tarraco",
+        "author": "Museu Nacional Arqueològic de Tarragona",
+        "publisher": "MNAT",
+        "url": "https://www.mnat.cat/en/theater-of-tarraco/",
+        "accessed": "2026-03-09"
+      },
+      "source_type": "museum",
+      "notes_internal": "Pregunta espacial para variedad."
+    },
+    {
+      "id": "Q010",
+      "number": 10,
+      "category": "provincial_forum",
+      "difficulty": "medium",
+      "correct_answer": "D",
+      "final_question_eligible": true,
+      "status": "verified",
+      "content": {
+        "es": {
+          "question": "¿Qué función tenía la torre del Pretorio en relación con el circo y el foro provincial de Tarraco?",
+          "options": {
+            "A": "Servía como templo principal del culto imperial",
+            "B": "Era la puerta marítima del puerto romano",
+            "C": "Almacenaba agua para el acueducto",
+            "D": "Alojaba las escaleras que comunicaban la ciudad baja con el foro provincial a través del circo"
+          },
+          "explanation": "El Pretorio era una torre romana que alojaba las escaleras que permitían pasar de la ciudad baja al foro provincial a través del circo."
+        },
+        "en": {
+          "question": "What role did the Pretorium tower have in relation to the circus and the provincial forum of Tarraco?",
+          "options": {
+            "A": "It served as the main temple of the imperial cult",
+            "B": "It was the maritime gate of the Roman port",
+            "C": "It stored water for the aqueduct",
+            "D": "It housed the stairways linking the lower city with the provincial forum through the circus"
+          },
+          "explanation": "The Pretorium was a Roman tower that housed the stairways connecting the lower city with the provincial forum through the circus."
+        },
+        "ca": {
+          "question": "Quina funció tenia la torre del Pretori en relació amb el circ i el fòrum provincial de Tàrraco?",
+          "options": {
+            "A": "Servia com a temple principal del culte imperial",
+            "B": "Era la porta marítima del port romà",
+            "C": "Emmagatzemava aigua per a l'aqüeducte",
+            "D": "Allotjava les escales que comunicaven la ciutat baixa amb el fòrum provincial a través del circ"
+          },
+          "explanation": "El Pretori era una torre romana que allotjava les escales que permetien passar de la ciutat baixa al fòrum provincial a través del circ."
+        }
+      },
+      "source": {
+        "title": "Pretori i Circ romà",
+        "author": "Museu d'Història de Tarragona",
+        "publisher": "Tarragona Turisme / Ajuntament de Tarragona",
+        "url": "https://www.tarragonaturisme.cat/ca/monument/pretori-i-circ-roma-mht",
+        "accessed": "2026-03-09"
+      },
+      "source_type": "museum",
+      "notes_internal": "Pregunta muy vinculada al personaje del Guardián del Pretorio."
+    }
+  ]
+}

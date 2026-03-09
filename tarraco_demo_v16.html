@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>0.16</title>
+<style>
+:root{
+  --bg:#16120f; --panel:#241d18; --panel2:#312721; --gold:#d9b56d; --gold2:#f4deb0;
+  --text:#f8f2e9; --muted:#cbbda9; --ok:#7bc48c; --danger:#de7a6b; --accent:#a9d2ff;
+  --cell:58px; --shadow:0 10px 24px rgba(0,0,0,.30);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{font-family:Inter,system-ui,Segoe UI,Arial,sans-serif;color:var(--text);background:radial-gradient(circle at top, rgba(217,181,109,.12), transparent 34%),linear-gradient(180deg,#1a1410,#110f0d 70%);min-height:100vh}
+button,input,select,textarea{font:inherit}
+.app{max-width:1180px;margin:0 auto;padding:10px}
+.shell{background:linear-gradient(180deg,rgba(49,39,33,.98),rgba(29,23,19,.98));border:1px solid rgba(240,213,154,.14);border-radius:18px;box-shadow:var(--shadow);padding:12px;display:grid;gap:12px}
+.compact-head{display:grid;gap:10px}
+.brand-wrap{display:flex;align-items:center;min-width:0}
+.brand-logo{display:block;width:100%;max-width:420px;height:auto;object-fit:contain}
+.sr-only{position:absolute !important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+h1{font-size:1.42rem;line-height:1.05;color:var(--gold2);margin-bottom:4px}
+.subtitle{color:var(--muted);font-size:.9rem}
+.top-controls{position:relative;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;align-items:end}
+.control-block,.top-controls button{position:relative}
+.config-arrow{position:absolute;top:-18px;left:0;display:none;color:#fff2cf;font-size:1rem;font-weight:900;text-shadow:0 2px 6px rgba(0,0,0,.45);z-index:3;pointer-events:none;transition:left .18s ease}
+
+.control-block{display:grid;gap:4px}
+.compact-select{max-width:92px}
+label{display:block;font-size:.74rem;color:var(--muted)}
+select,button{width:100%;border-radius:12px;border:1px solid rgba(255,255,255,.08);padding:10px 12px;font-size:.95rem}
+select{background:#171310;color:var(--text)}
+button{cursor:pointer;background:linear-gradient(180deg,#d4b372,#bc9552);color:#231910;font-weight:800;transition:transform .12s ease, opacity .12s ease}
+button:hover{transform:translateY(-1px)}
+button:disabled{cursor:not-allowed;opacity:.45;transform:none}
+button.ghost,button.secondary{background:#201914;color:var(--text);border-color:rgba(255,255,255,.12)}
+.game-layout{display:grid;gap:12px}
+.board-panel{display:grid;gap:10px;min-width:0}
+.board-topbar{display:grid;gap:8px}
+.info-line{display:flex;gap:6px;flex-wrap:wrap}
+.tag{font-size:.74rem;padding:5px 9px;border-radius:999px;background:rgba(255,255,255,.06);color:var(--gold2);border:1px solid rgba(255,255,255,.08)}
+#winnerBox{font-weight:800;color:var(--gold2);font-size:.95rem;min-height:1.2em}
+.board-wrapper{position:relative;background:url("images/bg.jpg") center/cover no-repeat;border-radius:16px;padding:10px 10px 14px;border:1px solid rgba(240,213,154,.12);overflow:hidden;min-height:542px;isolation:isolate}
+.board-wrapper::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(22,16,12,.26),rgba(22,16,12,.36));pointer-events:none;z-index:0}
+.board-actions{position:absolute;left:12px;top:12px;z-index:2;display:grid;gap:8px;justify-items:start;width:72px}
+.move-counter{position:relative;left:auto;top:auto;width:72px;min-width:72px;height:72px;border-radius:14px;background:linear-gradient(180deg,#f4deb0,#d7b776);color:#281d12;font-weight:900;font-size:2rem;display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow);z-index:2;border:2px solid rgba(0,0,0,.08)}
+.dice-subtag{font-size:.72rem;color:var(--gold2);min-height:1em;padding-left:4px;text-shadow:0 1px 2px rgba(0,0,0,.45)}
+.board-roll-btn{width:72px;min-width:72px;padding:10px 8px;box-shadow:var(--shadow);font-size:.92rem;line-height:1.05;white-space:normal;word-break:break-word;text-align:center}
+.move-counter.inactive{opacity:.55}
+.move-counter.rolling{animation:diePulse .12s linear infinite; box-shadow:0 0 0 3px rgba(245,214,140,.15), 0 12px 30px rgba(0,0,0,.24)}
+@keyframes diePulse{0%{transform:scale(1) rotate(0deg)}50%{transform:scale(1.04) rotate(-4deg)}100%{transform:scale(1) rotate(4deg)}}
+button:disabled,select:disabled{opacity:.5;cursor:not-allowed}
+.board-stage{position:relative;z-index:1;width:calc(var(--cell)*7);height:calc(var(--cell)*9);margin:96px auto 0;background:transparent;border-radius:16px;overflow:hidden;box-shadow:inset 0 0 0 1px rgba(255,255,255,.05)}
+.board-stage::before{content:"";position:absolute;inset:0;background-image:linear-gradient(to right, rgba(255,255,255,.03) 1px, transparent 1px),linear-gradient(to bottom, rgba(255,255,255,.03) 1px, transparent 1px);background-size:var(--cell) var(--cell);pointer-events:none}
+svg.edges{position:absolute;inset:0;overflow:visible}
+.edge{stroke:rgba(240,223,187,.5);stroke-width:10;stroke-linecap:round}
+.edge.main{stroke:rgba(255,231,180,.78);stroke-width:12}
+.cell{position:absolute;width:36px;height:36px;border-radius:10px;transform:translate(-50%,-50%);background:#9b836b;border:2px solid rgba(255,255,255,.12);box-shadow:0 6px 10px rgba(0,0,0,.18)}
+.cell.start{background:#7aa987}
+.cell.finish{background:#be8c50}
+.cell.current{box-shadow:0 0 0 4px rgba(244,222,176,.45), 0 0 18px rgba(244,222,176,.3)}
+.cell::after{content:attr(data-symbol);position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#2c1d12;font-weight:900;font-size:.95rem}
+.player-token{position:absolute;width:24px;height:24px;border-radius:999px;transform:translate(-50%,-50%);border:2px solid rgba(255,255,255,.94);box-shadow:0 4px 10px rgba(0,0,0,.35);transition:left .2s ease, top .2s ease}
+.side-panel{display:grid;gap:10px}
+.status-box,.controls-box,.message-log{background:rgba(0,0,0,.14);border:1px solid rgba(255,255,255,.06);border-radius:14px;padding:12px}
+.dice{width:72px;height:72px;border-radius:16px;background:linear-gradient(180deg,#f4deb0,#d7b776);color:#281d12;font-weight:900;font-size:2rem;display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow)}
+.dice.rolling{animation:spin .18s linear infinite}
+@keyframes spin{0%{transform:rotate(0)}50%{transform:rotate(8deg) scale(1.03)}100%{transform:rotate(0)}}
+.dice-label{font-size:.88rem;color:var(--muted)}
+.status-title{font-weight:800;color:var(--gold2);margin-bottom:8px;font-size:.94rem}
+.players{display:grid;gap:8px}
+.player-card{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid transparent}
+.player-card.active{border-color:rgba(240,213,154,.38);background:rgba(240,213,154,.08)}
+.token-dot{width:14px;height:14px;border-radius:999px;box-shadow:0 0 0 2px rgba(255,255,255,.15) inset}
+.player-name{font-weight:700;font-size:.96rem}
+.player-meta{font-size:.82rem;color:var(--muted)}
+.controls-box{display:grid;gap:10px}
+.start-confirm{width:100%;margin-top:4px}
+.start-choice-arrow{position:absolute;transform:translate(-50%,-135%);font-size:1.05rem;font-weight:900;color:#fff2cf;text-shadow:0 2px 5px rgba(0,0,0,.55);pointer-events:none;z-index:3}
+button.danger{background:linear-gradient(180deg,#b14242,#8f2626);color:#fff}
+.controls-grid{width:156px;max-width:100%;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.controls-grid button{height:48px;padding:0;font-size:1.25rem}
+.controls-grid .empty{visibility:hidden}
+.invalid-hint{margin-top:2px;text-align:center;color:var(--danger);min-height:1.2em;font-size:.86rem}
+.message-log p,.history-scroll p{margin:0 0 8px;color:var(--muted);font-size:.92rem;line-height:1.35}
+.log-header{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px}
+.log-preview{min-height:72px}
+.log-more{padding:7px 10px;font-size:.84rem;width:auto}
+.history-modal{width:min(680px,100%)}
+.history-scroll{max-height:14.5em;overflow:auto;padding-right:6px;margin-top:10px}
+.overlay{position:fixed;inset:0;background:rgba(10,8,7,.75);display:none;align-items:center;justify-content:center;padding:14px;z-index:10}
+.overlay.show{display:flex}
+.victory-overlay{position:fixed;inset:0;display:none;align-items:center;justify-content:center;padding:20px;z-index:30;background:radial-gradient(circle at center, rgba(123,85,25,.32), rgba(10,8,7,.92) 58%)}
+.victory-overlay.show{display:flex}
+.victory-card{width:min(92vw,720px);background:linear-gradient(180deg,rgba(44,31,21,.96),rgba(22,15,10,.98));border:1px solid rgba(244,222,176,.28);border-radius:24px;box-shadow:0 28px 70px rgba(0,0,0,.48);padding:28px 22px;text-align:center;overflow:hidden;position:relative}
+.victory-card::before{content:"";position:absolute;inset:-20% -10%;background:conic-gradient(from 180deg, rgba(244,222,176,.0), rgba(244,222,176,.28), rgba(244,222,176,0), rgba(244,222,176,.18), rgba(244,222,176,0));filter:blur(14px);animation:victoryGlow 3s ease-in-out forwards;pointer-events:none}
+.victory-kicker{position:relative;display:inline-flex;gap:8px;align-items:center;justify-content:center;padding:6px 12px;border-radius:999px;background:rgba(244,222,176,.12);border:1px solid rgba(244,222,176,.18);color:var(--gold2);font-size:.84rem;letter-spacing:.04em;text-transform:uppercase;animation:victoryRise .8s ease both}
+.victory-title{position:relative;margin:14px 0 8px;font-size:clamp(1.75rem,5.8vw,3rem);line-height:1.06;color:#fff2cf;text-shadow:0 6px 20px rgba(0,0,0,.28);animation:victoryRise 1.1s ease both}
+.victory-text{position:relative;margin:0 auto 18px;max-width:26ch;font-size:clamp(1rem,3.6vw,1.25rem);color:var(--sand);animation:victoryRise 1.4s ease both}
+.victory-burst{position:relative;height:74px;margin:10px 0 18px}
+.victory-burst span{position:absolute;left:50%;top:50%;width:8px;height:8px;border-radius:999px;background:rgba(244,222,176,.92);box-shadow:0 0 14px rgba(244,222,176,.65);animation:victorySpark 3s ease-out infinite;opacity:0}
+.victory-burst span:nth-child(1){transform:rotate(0deg) translateY(-4px);animation-delay:.05s}
+.victory-burst span:nth-child(2){transform:rotate(36deg) translateY(-4px);animation-delay:.18s}
+.victory-burst span:nth-child(3){transform:rotate(72deg) translateY(-4px);animation-delay:.32s}
+.victory-burst span:nth-child(4){transform:rotate(108deg) translateY(-4px);animation-delay:.46s}
+.victory-burst span:nth-child(5){transform:rotate(144deg) translateY(-4px);animation-delay:.6s}
+.victory-burst span:nth-child(6){transform:rotate(180deg) translateY(-4px);animation-delay:.74s}
+.victory-burst span:nth-child(7){transform:rotate(216deg) translateY(-4px);animation-delay:.88s}
+.victory-burst span:nth-child(8){transform:rotate(252deg) translateY(-4px);animation-delay:1.02s}
+.victory-burst span:nth-child(9){transform:rotate(288deg) translateY(-4px);animation-delay:1.16s}
+.victory-burst span:nth-child(10){transform:rotate(324deg) translateY(-4px);animation-delay:1.3s}
+.victory-actions{position:relative;display:flex;justify-content:center;animation:victoryRise 1.7s ease both}
+.victory-actions button{min-width:180px}
+@keyframes victoryRise{0%{opacity:0;transform:translateY(18px) scale(.96)}100%{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes victoryGlow{0%{opacity:0;transform:scale(.88) rotate(0deg)}30%{opacity:1}100%{opacity:.85;transform:scale(1.18) rotate(14deg)}}
+@keyframes victorySpark{0%,15%{opacity:0;transform-origin:center center;translate:0 0;scale:.3}22%{opacity:1}65%{opacity:.9;translate:0 -34px;scale:1.35}100%{opacity:0;translate:0 -48px;scale:.5}}
+
+.modal{width:min(640px,100%);max-height:88vh;overflow:auto;background:linear-gradient(180deg,#342922,#251d18);border:1px solid rgba(240,213,154,.16);border-radius:18px;box-shadow:var(--shadow);padding:16px}
+.question-meta{color:var(--muted);font-size:.9rem;margin-bottom:8px}
+.options{display:grid;gap:8px;margin-top:12px}
+.option{background:#201914;color:var(--text);text-align:left}
+.option.correct{outline:2px solid var(--ok)}
+.option.wrong{outline:2px solid var(--danger)}
+.feedback{margin-top:14px;padding:12px 14px;border-radius:12px;background:rgba(255,255,255,.05);min-height:60px}
+.feedback.ok{border:1px solid rgba(123,196,140,.45)}
+.feedback.bad{border:1px solid rgba(222,122,107,.45)}
+.modal-actions{display:flex;justify-content:flex-end;margin-top:14px}
+@media (min-width:900px){
+  .app{padding:16px}
+  .shell{padding:16px;gap:14px}
+  .compact-head{grid-template-columns:minmax(240px,420px) minmax(0,1fr);align-items:center}
+  .top-controls{grid-template-columns:92px 92px repeat(3,minmax(126px,1fr))}
+  .game-layout{grid-template-columns:minmax(0,1fr) 320px;align-items:start}
+  .board-panel{min-width:0}
+  .board-wrapper{min-height:560px;padding:14px}
+  .board-actions{left:18px;top:18px;width:82px}
+  .move-counter{width:82px;min-width:82px;height:82px;font-size:2.45rem}
+  .board-roll-btn{width:82px;min-width:82px}
+  .dice{width:82px;height:82px;font-size:2.2rem}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="shell">
+    <div class="compact-head">
+      <div class="brand-wrap">
+        <img src="images/logo.png" alt="Tarraco Romana" class="brand-logo" />
+        <div class="sr-only">
+          <h1 id="ui-title">Tarraco Romana</h1>
+          <p id="ui-subtitle" class="subtitle">Demo 0.16 amb inici automàtic i configuració guiada.</p>
+        </div>
+      </div>
+      <div class="top-controls" id="topControls">
+        <div id="configArrow" class="config-arrow" aria-hidden="true">▼</div>
+        <div class="control-block compact-select" id="playersControl">
+          <label id="label-players" for="playerCountSelect">Jugadores</label>
+          <select id="playerCountSelect">
+            <option value="0">0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+          </select>
+        </div>
+        <div class="control-block compact-select" id="languageControl">
+          <label id="label-language" for="languageSelect">Idioma</label>
+          <select id="languageSelect">
+            <option value="">—</option>
+            <option value="es">Castellano</option>
+            <option value="en">English</option>
+            <option value="ca">Català</option>
+          </select>
+        </div>
+        <button id="newBoardBtn" class="secondary">Nuevo tablero</button>
+        <button id="newGameBtn">Nueva partida</button>
+        <button id="helpBtn" class="ghost">Cómo jugar</button>
+      </div>
+    </div>
+
+    <div class="game-layout">
+      <main class="board-panel">
+        <div class="board-topbar"><div id="winnerBox"></div></div>
+
+        <div id="boardWrapper" class="board-wrapper">
+          <div class="board-actions">
+            <div id="moveCounter" class="move-counter inactive">–</div>
+            <button id="rollBtn" class="board-roll-btn">Tira<br>el dau</button>
+          </div>
+          <div id="boardStage" class="board-stage"></div>
+        </div>
+      </main>
+
+      <aside class="side-panel">
+        
+        <div class="status-box">
+          <div class="status-title" id="status-title">Estado de la partida</div>
+          <div id="status-text"></div>
+        </div>
+
+        <div class="controls-box">
+          <div class="status-title" id="move-title">Movimiento</div>
+          <div class="controls-grid">
+            <div class="empty"></div>
+            <button id="upBtn" class="secondary">↑</button>
+            <div class="empty"></div>
+            <button id="leftBtn" class="secondary">←</button>
+            <button id="downBtn" class="secondary">↓</button>
+            <button id="rightBtn" class="secondary">→</button>
+          </div>
+          <div id="invalidHint" class="invalid-hint"></div>
+          <button id="startConfirmBtn" class="start-confirm" style="display:none">OK</button>
+        </div>
+
+        <div class="status-box">
+          <div class="status-title" id="players-title">Jugadores</div>
+          <div id="playersList" class="players"></div>
+        </div>
+
+        <div class="message-log">
+          <div class="log-header">
+            <strong id="log-title">Crónica del Guardián</strong>
+            <button id="viewMoreBtn" class="secondary log-more">Ver más</button>
+          </div>
+          <div id="logText" class="log-preview"></div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</div>
+
+<div id="questionOverlay" class="overlay">
+  <div class="modal">
+    <h2 id="guardian-title">El Guardián del Pretorio pregunta</h2>
+    <div id="questionMeta" class="question-meta"></div>
+    <div id="questionText"></div>
+    <div id="questionOptions" class="options"></div>
+    <div id="feedback" class="feedback"></div>
+    <div class="modal-actions">
+      <button id="closeQuestionBtn" class="secondary" disabled>Cerrar</button>
+    </div>
+  </div>
+</div>
+
+<div id="helpOverlay" class="overlay">
+  <div class="modal">
+    <h2 id="help-title">Cómo jugar</h2>
+    <div id="help-content"></div>
+    <div class="modal-actions"><button id="closeHelpBtn">Entendido</button></div>
+  </div>
+</div>
+
+<div id="historyOverlay" class="overlay">
+  <div class="modal history-modal">
+    <h2 id="history-title">Crónica completa del Guardián</h2>
+    <div id="historyText" class="history-scroll"></div>
+    <div class="modal-actions"><button id="closeHistoryBtn" class="secondary">Cerrar</button></div>
+  </div>
+</div>
+
+
+<div id="victoryOverlay" class="victory-overlay">
+  <div class="victory-card">
+    <div class="victory-kicker" id="victoryKicker">Tàrraco Romana</div>
+    <h2 id="victoryTitle" class="victory-title">El jugador 1 ha guanyat al Guardià!</h2>
+    <p id="victoryText" class="victory-text">Enhorabona, ets lliure!</p>
+    <div class="victory-burst" aria-hidden="true">
+      <span></span><span></span><span></span><span></span><span></span>
+      <span></span><span></span><span></span><span></span><span></span>
+    </div>
+    <div class="victory-actions"><button id="victoryNewGameBtn">Nova partida</button></div>
+  </div>
+</div>
+
+<script>
+const I18N = {
+  es: {
+    title:"Tarraco Romana", subtitle:"Demo 0.16 con inicio guiado y asignación automática de salida.",
+    language:"Idioma", players:"Jugadores", newGame:"Nueva partida", abandonGame:"Abandonar partida", newBoard:"Nuevo tablero", roll:"Tira<br>el dado", howToPlay:"Cómo jugar", startCell:"Casilla inicial", chooseStart:"Elige tu casilla inicial", confirmStart:"Confirmar inicio",
+    statusTitle:"Estado de la partida", playersTitle:"Jugadores", moveTitle:"Movimiento", boardTag:"Cuadrícula 7 × 9", rulesTag:"Sin diagonales · fallo 1-3", goalTag:"3 inicios · 1 salida", logTitle:"Crónica del Guardián", historyTitle:"Crónica completa del Guardián", viewMore:"Ver más", victoryKicker:"Victoria", victoryWinMessage:"{player} ha ganado al Guardián!", victoryFreedom:"¡Enhorabuena, eres libre!",
+    guardianTitle:"El Guardián del Pretorio pregunta", helpTitle:"Cómo jugar", close:"Cerrar", understood:"Entendido",
+    helpContent:`<p>1. Empieza una partida y tira el D6.</p><p>2. Tras la tirada, mueve la ficha <strong>casilla a casilla</strong> con las flechas de pantalla o del teclado.</p><p>3. <strong>No se permite movimiento diagonal</strong>. Solo puedes moverte por caminos conectados.</p><p>4. Debes gastar <strong>todo</strong> el movimiento de la tirada.</p><p>5. Al terminar el movimiento aparece la pregunta del Guardián. Si fallas, tiras un dado de <strong>1 a 3</strong> y retrocedes automáticamente hacia el inicio más cercano.</p>`,
+    waitingStart:"Sigue los pasos para empezar.", setupTitle:"Preparación", setupPlayers:"Selecciona número de jugadores", setupLanguage:"Selecciona idioma", setupBoard:"Haz clic repetidamente en Nuevo tablero y elige el tablero que quieras", setupNewGame:"Pulsa Nueva partida", setupNewGameReady:"Pulsa Nueva partida", selectingStart:"Asignando casillas iniciales", startSelectionHelp:"Las fichas se colocan automáticamente en los inicios disponibles.",  currentTurn:"Turno actual", availableQuestions:"Preguntas disponibles", diceLabel:"Última tirada", movementLeft:"Movimiento restante", moveWithArrows:"Usa las flechas para mover", movementReady:"Mueve la ficha", waitingQuestion:"En espera", finalPromptMeta:"Pregunta final", normalPromptMeta:"Pregunta del turno", questionNumber:"Pregunta", category:"Categoría", difficulty:"Dificultad", easy:"Fácil", medium:"Media", hard:"Difícil",
+    player:"Jugador", correct:"¡Correcto!", incorrect:"Incorrecto", won:"ha ganado la partida", reachedGoal:"ha llegado a la salida", questionPoolReset:"Se ha reiniciado el mazo de preguntas.", newGameReady:"Nueva partida lista.", randomBoardReady:"Tablero renovado.", launchFirst:"Primero inicia una partida.", rollDisabledQuestion:"Ahora mismo no se puede tirar.", moveConsumed:"Movimiento completado.", mustSpendAll:"Debes gastar todo el movimiento.", invalidMove:"Movimiento no permitido.", questionAfterMove:"El Guardián formula una pregunta.", retreatRoll:"Retroceso", retreating:"Retrocediendo", chooseAnswer:"Elige una respuesta", finalGoal:"Salida única", nearStart:"inicio más cercano", cannotMove:"Sin movimiento válido.",
+    city_identity:"Identidad de la ciudad", province_administration:"Administración provincial", archaeology_heritage:"Arqueología y patrimonio", circus:"Circo", amphitheatre:"Anfiteatro", walls:"Murallas", infrastructure:"Infraestructura", theatre:"Teatro", provincial_forum:"Foro provincial"
+  },
+  en: {
+    title:"Tarraco Romana", subtitle:"Demo 0.16 with guided setup and automatic start assignment.", language:"Language", players:"Players", newGame:"New game", abandonGame:"Abandon game", newBoard:"New board", roll:"Roll<br>the die", howToPlay:"How to play", startCell:"Start cell", chooseStart:"Choose your start cell", confirmStart:"Confirm start", statusTitle:"Game status", playersTitle:"Players", moveTitle:"Movement", boardTag:"7 × 9 grid", rulesTag:"No diagonals · fail 1-3", goalTag:"3 starts · 1 exit", logTitle:"Guardian's Chronicle", historyTitle:"Full Guardian Chronicle", viewMore:"View more", victoryKicker:"Victory", victoryWinMessage:"{player} has defeated the Guardian!", victoryFreedom:"Congratulations, you are free!", guardianTitle:"The Praetorium Guardian asks", helpTitle:"How to play", close:"Close", understood:"Understood",
+    helpContent:`<p>1. Start a game and roll the D6.</p><p>2. After rolling, move your token <strong>one cell at a time</strong> using the on-screen arrows or keyboard arrows.</p><p>3. <strong>Diagonal movement is not allowed</strong>. You can only move through connected paths.</p><p>4. You must spend <strong>all</strong> movement points.</p><p>5. When movement ends, the Guardian asks a question. If you fail, roll a <strong>1 to 3</strong> die and move back automatically toward the nearest start.</p>`,
+    waitingStart:"Follow the setup steps to begin.", setupTitle:"Setup", setupPlayers:"Select number of players", setupLanguage:"Select language", setupBoard:"Click New board repeatedly and choose the board you want", setupNewGame:"Press New game", setupNewGameReady:"Press New game", selectingStart:"Assigning start cells", startSelectionHelp:"Tokens are placed automatically on the available starts.",  currentTurn:"Current turn", availableQuestions:"Available questions", diceLabel:"Last roll", movementLeft:"Movement left", moveWithArrows:"Use arrows to move", movementReady:"Move the token", waitingQuestion:"Waiting", finalPromptMeta:"Final question", normalPromptMeta:"Turn question", questionNumber:"Question", category:"Category", difficulty:"Difficulty", easy:"Easy", medium:"Medium", hard:"Hard", player:"Player", correct:"Correct!", incorrect:"Incorrect", won:"has won the game", reachedGoal:"has reached the exit", questionPoolReset:"Question deck reset.", newGameReady:"New game ready.", randomBoardReady:"Board renewed.", launchFirst:"Start a game first.", rollDisabledQuestion:"You cannot roll now.", moveConsumed:"Movement completed.", mustSpendAll:"You must spend all movement.", invalidMove:"Invalid move.", questionAfterMove:"The Guardian asks a question.", retreatRoll:"Retreat", retreating:"Retreating", chooseAnswer:"Choose an answer", finalGoal:"Single exit", nearStart:"nearest start", cannotMove:"No valid move.", city_identity:"City identity", province_administration:"Provincial administration", archaeology_heritage:"Archaeology and heritage", circus:"Circus", amphitheatre:"Amphitheatre", walls:"Walls", infrastructure:"Infrastructure", theatre:"Theatre", provincial_forum:"Provincial forum"
+  },
+  ca: {
+    title:"Tàrraco Romana", subtitle:"Demo 0.16 amb inici automàtic i configuració guiada.", language:"Idioma", players:"Jugadors", newGame:"Nova partida", abandonGame:"Abandonar partida", newBoard:"Nou tauler", roll:"Tira<br>el dau", howToPlay:"Com jugar", startCell:"Casella inicial", chooseStart:"Escull la teva casella inicial", confirmStart:"Confirmar inici", statusTitle:"Estat de la partida", playersTitle:"Jugadors", moveTitle:"Moviment", boardTag:"Graella 7 × 9", rulesTag:"Sense diagonals · error 1-3", goalTag:"3 inicis · 1 sortida", logTitle:"Crònica del Guardià", historyTitle:"Crònica completa del Guardià", viewMore:"Ver més", victoryKicker:"Victòria", victoryWinMessage:"{player} ha guanyat al Guardià!", victoryFreedom:"Enhorabona, ets lliure!", guardianTitle:"El Guardià del Pretori pregunta", helpTitle:"Com jugar", close:"Tanca", understood:"Entès",
+    helpContent:`<p>1. Comença una partida i tira el D6.</p><p>2. Després de la tirada, mou la fitxa <strong>casella a casella</strong> amb les fletxes de pantalla o del teclat.</p><p>3. <strong>No es permet el moviment diagonal</strong>. Només et pots moure per camins connectats.</p><p>4. Has de gastar <strong>tot</strong> el moviment.</p><p>5. En acabar el moviment, el Guardià fa una pregunta. Si falles, tires un dau d'<strong>1 a 3</strong> i retrocedeixes automàticament cap a l'inici més proper.</p>`,
+    waitingStart:"Segueix els passos per començar.", setupTitle:"Preparació", setupPlayers:"Selecciona nombre de jugadors", setupLanguage:"Selecciona idioma", setupBoard:"Clica repetidament el botó i tria el taulell que vulguis", setupNewGame:"Prem Nova partida", setupNewGameReady:"Prem Nova partida", selectingStart:"Assignant caselles inicials", startSelectionHelp:"Les fitxes es col·loquen automàticament als inicis disponibles.",  currentTurn:"Torn actual", availableQuestions:"Preguntes disponibles", diceLabel:"Darrera tirada", movementLeft:"Moviment restant", moveWithArrows:"Fes servir les fletxes per moure", movementReady:"Mou la fitxa", waitingQuestion:"En espera", finalPromptMeta:"Pregunta final", normalPromptMeta:"Pregunta del torn", questionNumber:"Pregunta", category:"Categoria", difficulty:"Dificultat", easy:"Fàcil", medium:"Mitjana", hard:"Difícil", player:"Jugador", correct:"Correcte!", incorrect:"Incorrecte", won:"ha guanyat la partida", reachedGoal:"ha arribat a la sortida", questionPoolReset:"S'ha reiniciat el conjunt de preguntes.", newGameReady:"Nova partida preparada.", randomBoardReady:"Tauler renovat.", launchFirst:"Primer inicia una partida.", rollDisabledQuestion:"Ara no es pot tirar.", moveConsumed:"Moviment completat.", mustSpendAll:"Has de gastar tot el moviment.", invalidMove:"Moviment no permès.", questionAfterMove:"El Guardià fa una pregunta.", retreatRoll:"Retrocedir", retreating:"Retrocedint", chooseAnswer:"Tria una resposta", finalGoal:"Sortida única", nearStart:"inici més proper", cannotMove:"Sense moviment vàlid.", city_identity:"Identitat de la ciutat", province_administration:"Administració provincial", archaeology_heritage:"Arqueologia i patrimoni", circus:"Circ", amphitheatre:"Amfiteatre", walls:"Muralles", infrastructure:"Infraestructura", theatre:"Teatre", provincial_forum:"Fòrum provincial"
+  }
+};
+
+const QUESTIONS = [
+  {id:"Q001",number:1,category:"city_identity",difficulty:"easy",correct_answer:"A",final_question_eligible:true,content:{es:{question:"¿Cómo se llamaba en época romana la actual ciudad de Tarragona?",options:{A:"Tarraco",B:"Emerita Augusta",C:"Barcino",D:"Caesaraugusta"},explanation:"La actual Tarragona se llamaba Tarraco en época romana."},en:{question:"What was the Roman name of present-day Tarragona?",options:{A:"Tarraco",B:"Emerita Augusta",C:"Barcino",D:"Caesaraugusta"},explanation:"Present-day Tarragona was called Tarraco in Roman times."},ca:{question:"Com s'anomenava en època romana l'actual ciutat de Tarragona?",options:{A:"Tarraco",B:"Emerita Augusta",C:"Barcino",D:"Caesaraugusta"},explanation:"L'actual Tarragona s'anomenava Tarraco en època romana."}}},
+  {id:"Q002",number:2,category:"province_administration",difficulty:"easy",correct_answer:"B",final_question_eligible:true,content:{es:{question:"¿De qué provincia romana fue capital Tarraco durante el Alto Imperio?",options:{A:"Lusitania",B:"Hispania Citerior",C:"Baetica",D:"Gallaecia"},explanation:"Tarraco fue capital de la provincia Hispania Citerior."},en:{question:"Of which Roman province was Tarraco the capital during the High Empire?",options:{A:"Lusitania",B:"Hispania Citerior",C:"Baetica",D:"Gallaecia"},explanation:"Tarraco was the capital of Hispania Citerior."},ca:{question:"De quina província romana va ser capital Tàrraco durant l'Alt Imperi?",options:{A:"Lusitània",B:"Hispania Citerior",C:"Bètica",D:"Gallaecia"},explanation:"Tàrraco va ser capital de la província Hispania Citerior."}}},
+  {id:"Q003",number:3,category:"archaeology_heritage",difficulty:"easy",correct_answer:"C",final_question_eligible:true,content:{es:{question:"¿En qué año fue declarado Patrimonio Mundial por la UNESCO el Conjunto Arqueológico de Tarraco?",options:{A:"1992",B:"1998",C:"2000",D:"2004"},explanation:"La UNESCO lo declaró Patrimonio Mundial en 2000."},en:{question:"In what year was the Archaeological Ensemble of Tarraco declared a UNESCO World Heritage Site?",options:{A:"1992",B:"1998",C:"2000",D:"2004"},explanation:"UNESCO declared it a World Heritage Site in 2000."},ca:{question:"En quin any va ser declarat Patrimoni Mundial per la UNESCO el Conjunt Arqueològic de Tàrraco?",options:{A:"1992",B:"1998",C:"2000",D:"2004"},explanation:"La UNESCO el va declarar Patrimoni Mundial l'any 2000."}}},
+  {id:"Q004",number:4,category:"circus",difficulty:"easy",correct_answer:"D",final_question_eligible:false,content:{es:{question:"¿Para qué tipo de espectáculos se construyó principalmente el circo romano de Tarraco?",options:{A:"Combates de gladiadores",B:"Representaciones teatrales",C:"Debates políticos",D:"Carreras de carros"},explanation:"El circo romano se destinaba principalmente a las carreras de carros."},en:{question:"What type of spectacles was the Roman circus of Tarraco mainly built for?",options:{A:"Gladiator fights",B:"Theatrical performances",C:"Political debates",D:"Chariot races"},explanation:"The Roman circus was mainly used for chariot races."},ca:{question:"Per a quin tipus d'espectacles es va construir principalment el circ romà de Tàrraco?",options:{A:"Combats de gladiadors",B:"Representacions teatrals",C:"Debats polítics",D:"Curses de carros"},explanation:"El circ romà es destinava principalment a les curses de carros."}}},
+  {id:"Q005",number:5,category:"amphitheatre",difficulty:"medium",correct_answer:"B",final_question_eligible:true,content:{es:{question:"¿Qué obispo cristiano fue martirizado en el anfiteatro de Tarraco en el año 259 d. C.?",options:{A:"San Isidoro",B:"San Fructuoso",C:"San Leandro",D:"San Paciano"},explanation:"En el anfiteatro de Tarraco fueron martirizados Fructuoso, Augurio y Eulogio en 259 d. C."},en:{question:"Which Christian bishop was martyred in the amphitheatre of Tarraco in AD 259?",options:{A:"Saint Isidore",B:"Saint Fructuosus",C:"Saint Leander",D:"Saint Pacian"},explanation:"Fructuosus, Augurius and Eulogius were martyred there in AD 259."},ca:{question:"Quin bisbe cristià va ser martiritzat a l'amfiteatre de Tàrraco l'any 259 dC?",options:{A:"Sant Isidor",B:"Sant Fructuós",C:"Sant Leandre",D:"Sant Pacià"},explanation:"Fructuós, Auguri i Eulogi hi van ser martiritzats l'any 259 dC."}}},
+  {id:"Q006",number:6,category:"walls",difficulty:"easy",correct_answer:"A",final_question_eligible:false,content:{es:{question:"¿Qué monumento de Tarraco se considera la construcción romana conservada más antigua de la ciudad?",options:{A:"Las murallas",B:"El anfiteatro",C:"El teatro",D:"El foro de la colonia"},explanation:"Las murallas son el monumento romano conservado más antiguo de Tarraco."},en:{question:"Which monument of Tarraco is considered the oldest preserved Roman construction in the city?",options:{A:"The walls",B:"The amphitheatre",C:"The theatre",D:"The colony forum"},explanation:"The walls are the oldest preserved Roman monument in Tarraco."},ca:{question:"Quin monument de Tàrraco es considera la construcció romana conservada més antiga de la ciutat?",options:{A:"Les muralles",B:"L'amfiteatre",C:"El teatre",D:"El fòrum de la colònia"},explanation:"Les muralles són el monument romà conservat més antic de Tàrraco."}}},
+  {id:"Q007",number:7,category:"walls",difficulty:"medium",correct_answer:"C",final_question_eligible:false,content:{es:{question:"Aproximadamente, ¿cuántos metros de la muralla romana de Tarraco se conservan hoy en día?",options:{A:"300 metros",B:"700 metros",C:"1.100 metros",D:"2.500 metros"},explanation:"Se conservan hoy aproximadamente 1.100 metros de muralla romana."},en:{question:"Approximately how many metres of the Roman wall of Tarraco are preserved today?",options:{A:"300 metres",B:"700 metres",C:"1,100 metres",D:"2,500 metres"},explanation:"Around 1,100 metres of the Roman wall are preserved today."},ca:{question:"Aproximadament, quants metres de la muralla romana de Tàrraco es conserven avui dia?",options:{A:"300 metres",B:"700 metres",C:"1.100 metres",D:"2.500 metres"},explanation:"Se'n conserven aproximadament 1.100 metres."}}},
+  {id:"Q008",number:8,category:"infrastructure",difficulty:"easy",correct_answer:"B",final_question_eligible:false,content:{es:{question:"¿Con qué otro nombre popular se conoce el acueducto de les Ferreres?",options:{A:"Puente de Augusto",B:"Puente del Diablo",C:"Puente de Trajano",D:"Puente de Escipión"},explanation:"El acueducto de les Ferreres es conocido popularmente como Puente del Diablo."},en:{question:"By what other popular name is the Les Ferreres aqueduct known?",options:{A:"Augustus Bridge",B:"Devil's Bridge",C:"Trajan's Bridge",D:"Scipio's Bridge"},explanation:"The Les Ferreres aqueduct is popularly known as the Devil's Bridge."},ca:{question:"Amb quin altre nom popular es coneix l'aqüeducte de les Ferreres?",options:{A:"Pont d'August",B:"Pont del Diable",C:"Pont de Trajà",D:"Pont d'Escipió"},explanation:"L'aqüeducte de les Ferreres és conegut popularment com a Pont del Diable."}}},
+  {id:"Q009",number:9,category:"theatre",difficulty:"medium",correct_answer:"C",final_question_eligible:false,content:{es:{question:"¿Dónde se encontraba el teatro romano de Tarraco dentro de la ciudad?",options:{A:"Junto a las murallas del recinto superior",B:"Dentro del anfiteatro",C:"Entre el foro local y el puerto",D:"Encima del acueducto"},explanation:"El teatro se construyó entre el foro local y el puerto."},en:{question:"Where was the Roman theatre of Tarraco located within the city?",options:{A:"Next to the walls of the upper enclosure",B:"Inside the amphitheatre",C:"Between the local forum and the port",D:"On top of the aqueduct"},explanation:"The theatre was built between the local forum and the port."},ca:{question:"On es trobava el teatre romà de Tàrraco dins de la ciutat?",options:{A:"Al costat de les muralles del recinte superior",B:"Dins de l'amfiteatre",C:"Entre el fòrum local i el port",D:"Damunt de l'aqüeducte"},explanation:"El teatre es va construir entre el fòrum local i el port."}}},
+  {id:"Q010",number:10,category:"provincial_forum",difficulty:"medium",correct_answer:"D",final_question_eligible:true,content:{es:{question:"¿Qué función tenía la torre del Pretorio en relación con el circo y el foro provincial de Tarraco?",options:{A:"Servía como templo principal del culto imperial",B:"Era la puerta marítima del puerto romano",C:"Almacenaba agua para el acueducto",D:"Alojaba las escaleras que comunicaban la ciudad baja con el foro provincial a través del circo"},explanation:"El Pretorio alojaba las escaleras que conectaban la ciudad baja con el foro provincial a través del circo."},en:{question:"What role did the Pretorium tower have in relation to the circus and the provincial forum of Tarraco?",options:{A:"It served as the main temple of the imperial cult",B:"It was the maritime gate of the Roman port",C:"It stored water for the aqueduct",D:"It housed the stairways linking the lower city with the provincial forum through the circus"},explanation:"The Pretorium housed the stairways linking the lower city with the provincial forum through the circus."},ca:{question:"Quina funció tenia la torre del Pretori en relació amb el circ i el fòrum provincial de Tàrraco?",options:{A:"Servia com a temple principal del culte imperial",B:"Era la porta marítima del port romà",C:"Emmagatzemava aigua per a l'aqüeducte",D:"Allotjava les escales que comunicaven la ciutat baixa amb el fòrum provincial a través del circ"},explanation:"El Pretori allotjava les escales que connectaven la ciutat baixa amb el fòrum provincial a través del circ."}}}
+];
+
+const PLAYER_COLORS = ['#e45d5d','#5db9e4','#85cb74'];
+const COLS=7, ROWS=9, CELL=58;
+const START_CANDIDATES=[{r:8,c:1},{r:8,c:3},{r:8,c:5}], FINISH={r:0,c:3};
+const state = {lang:'es',started:false,gameOver:false,asking:false,busy:false,currentPlayer:0,players:[],board:null,availableQuestionIds:[],currentQuestion:null,awaitingFinal:false,lastDie:null,movementRemaining:0,moveMode:false,retreatMode:false,pendingRetreat:null,lastAnswerCorrect:null,logEntries:[],selectingStarts:false,startChoiceIndex:0,startSelectPlayer:0,setup:{playersChosen:false,languageChosen:false,boardChosen:false}};
+const el = {
+  boardWrapper:document.getElementById('boardWrapper'),
+  languageSelect:document.getElementById('languageSelect'), playerCountSelect:document.getElementById('playerCountSelect'), newGameBtn:document.getElementById('newGameBtn'), newBoardBtn:document.getElementById('newBoardBtn'), rollBtn:document.getElementById('rollBtn'), helpBtn:document.getElementById('helpBtn'),
+  statusText:document.getElementById('status-text'), playersList:document.getElementById('playersList'), boardStage:document.getElementById('boardStage'), logText:document.getElementById('logText'), winnerBox:document.getElementById('winnerBox'), dice:document.getElementById('dice'), diceLabel:document.getElementById('diceLabel'), diceSubLabel:document.getElementById('diceSubLabel'),
+  moveCounter:document.getElementById('moveCounter'), invalidHint:document.getElementById('invalidHint'),
+  upBtn:document.getElementById('upBtn'), downBtn:document.getElementById('downBtn'), leftBtn:document.getElementById('leftBtn'), rightBtn:document.getElementById('rightBtn'),
+  questionOverlay:document.getElementById('questionOverlay'), guardianTitle:document.getElementById('guardian-title'), questionMeta:document.getElementById('questionMeta'), questionText:document.getElementById('questionText'), questionOptions:document.getElementById('questionOptions'), feedback:document.getElementById('feedback'), closeQuestionBtn:document.getElementById('closeQuestionBtn'),
+  helpOverlay:document.getElementById('helpOverlay'), closeHelpBtn:document.getElementById('closeHelpBtn'), helpContent:document.getElementById('help-content'),
+  viewMoreBtn:document.getElementById('viewMoreBtn'), historyOverlay:document.getElementById('historyOverlay'), historyTitle:document.getElementById('history-title'), historyText:document.getElementById('historyText'), closeHistoryBtn:document.getElementById('closeHistoryBtn'), victoryOverlay:document.getElementById('victoryOverlay'), victoryKicker:document.getElementById('victoryKicker'), victoryTitle:document.getElementById('victoryTitle'), victoryText:document.getElementById('victoryText'), victoryNewGameBtn:document.getElementById('victoryNewGameBtn'), startConfirmBtn:document.getElementById('startConfirmBtn'), configArrow:document.getElementById('configArrow'), topControls:document.getElementById('topControls')
+};
+
+const t = k => I18N[state.lang][k] ?? k;
+const delay = ms => new Promise(r=>setTimeout(r,ms));
+const key = (r,c)=>`${r},${c}`;
+const parseKey = k => ({r:Number(k.split(',')[0]), c:Number(k.split(',')[1])});
+const dirs = {up:[-1,0],down:[1,0],left:[0,-1],right:[0,1]};
+function rand(n){return Math.floor(Math.random()*n)}
+function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=rand(i+1);[b[i],b[j]]=[b[j],b[i]]}return b}
+function dieRoll(max=6){return Math.floor(Math.random()*max)+1}
+
+function resetQuestions(){state.availableQuestionIds = QUESTIONS.map(q=>q.id)}
+function getQuestion(finalOnly=false){
+  let pool=QUESTIONS.filter(q=>state.availableQuestionIds.includes(q.id) && (!finalOnly || q.final_question_eligible));
+  if(!pool.length){resetQuestions(); log(t('questionPoolReset')); pool=QUESTIONS.filter(q=>!finalOnly || q.final_question_eligible)}
+  const q=pool[rand(pool.length)];
+  state.availableQuestionIds = state.availableQuestionIds.filter(id=>id!==q.id);
+  return q;
+}
+function localizeQuestion(q){return q.content[state.lang] || q.content.es}
+
+
+function updateResponsiveBoardScale(){
+  const mobile = window.innerWidth < 760;
+  if(!mobile){
+    document.documentElement.style.setProperty('--board-scale','1');
+    document.documentElement.style.setProperty('--counter-scale','1');
+    return;
+  }
+  const available = Math.max(250, (el.boardWrapper?.clientWidth || window.innerWidth) - 20);
+  const baseWidth = CELL * COLS;
+  const scale = Math.min(1, Math.max(0.62, available / baseWidth));
+  const counterScale = Math.max(0.78, scale);
+  document.documentElement.style.setProperty('--board-scale', String(scale));
+  document.documentElement.style.setProperty('--counter-scale', String(counterScale));
+}
+
+function makeBoard(){
+  const playerCount = Math.max(1, Number(el.playerCountSelect.value) || 1);
+  const chosenStarts = shuffle(START_CANDIDATES).slice(0, playerCount).sort((a,b)=>a.c-b.c);
+  const active=new Set([key(FINISH.r,FINISH.c), ...chosenStarts.map(s=>key(s.r,s.c))]);
+  const edges=new Map();
+  const addEdge=(a,b)=>{ if(!edges.has(a)) edges.set(a,new Set()); if(!edges.has(b)) edges.set(b,new Set()); edges.get(a).add(b); edges.get(b).add(a); active.add(a); active.add(b); };
+
+  const trunkByColumn = {
+    1:[{r:7,c:1},{r:6,c:1},{r:6,c:2},{r:5,c:2},{r:4,c:2},{r:4,c:3},{r:3,c:3},{r:2,c:3},{r:1,c:3},{r:0,c:3}],
+    3:[{r:7,c:3},{r:6,c:3},{r:5,c:3},{r:5,c:4},{r:4,c:4},{r:3,c:4},{r:3,c:3},{r:2,c:3},{r:1,c:3},{r:0,c:3}],
+    5:[{r:7,c:5},{r:6,c:5},{r:6,c:4},{r:5,c:4},{r:4,c:4},{r:4,c:3},{r:3,c:3},{r:2,c:3},{r:1,c:3},{r:0,c:3}]
+  };
+  chosenStarts.forEach((s)=>{
+    let prev=key(s.r,s.c);
+    for(const p of trunkByColumn[s.c]){ const k=key(p.r,p.c); addEdge(prev,k); prev=k; }
+  });
+  const extras = [
+    [[7,1],[7,2]], [[7,2],[7,3]], [[7,3],[7,4]], [[7,4],[7,5]],
+    [[6,2],[6,3]], [[6,3],[6,4]], [[5,2],[5,3]], [[5,3],[5,4]],
+    [[4,2],[4,3]], [[4,3],[4,4]], [[3,2],[3,3]], [[3,3],[3,4]],
+    [[6,1],[7,1]], [[6,5],[7,5]], [[5,2],[6,2]], [[5,4],[6,4]],
+    [[4,2],[5,2]], [[4,4],[5,4]], [[3,2],[4,2]], [[3,4],[4,4]],
+    [[3,2],[2,2]], [[2,2],[2,3]], [[2,3],[2,4]], [[2,4],[3,4]],
+    [[1,2],[1,3]], [[1,3],[1,4]], [[1,2],[2,2]], [[1,4],[2,4]],
+    [[6,0],[6,1]], [[6,5],[6,6]], [[5,1],[5,2]], [[5,4],[5,5]],
+    [[4,1],[4,2]], [[4,4],[4,5]], [[3,1],[3,2]], [[3,4],[3,5]],
+    [[2,1],[2,2]], [[2,4],[2,5]]
+  ];
+  shuffle(extras).slice(0, 26).forEach(([a,b])=>addEdge(key(a[0],a[1]), key(b[0],b[1])));
+  [...active].forEach(k=>{ const {r,c}=parseKey(k); if(r===0 && c!==FINISH.c){ active.delete(k); edges.delete(k); } });
+  [...edges.keys()].forEach(a=>{ if(!active.has(a)) return; edges.set(a, new Set([...edges.get(a)].filter(b=>active.has(b)))); });
+  const finishK = key(FINISH.r,FINISH.c);
+  const reachable = bfs(finishK, edges);
+  [...active].forEach(k=>{ if(!reachable.has(k)){ active.delete(k); edges.delete(k); } });
+  [...edges.keys()].forEach(a=>edges.set(a,new Set([...edges.get(a)].filter(b=>active.has(b)))));
+  return {active, edges, starts: chosenStarts.map(s=>key(s.r,s.c)), finish: finishK};
+}
+function bfs(start, edges){ const seen=new Set([start]); const q=[start]; while(q.length){ const cur=q.shift(); for(const n of (edges.get(cur)||[])){ if(!seen.has(n)){ seen.add(n); q.push(n); } } } return seen; }
+function shortestPath(start, goals){
+  const goalSet = new Set(Array.isArray(goals)?goals:[goals]);
+  const q=[start]; const prev={ [start]: null };
+  while(q.length){ const cur=q.shift(); if(goalSet.has(cur)){ const path=[]; let p=cur; while(p!==start){ path.unshift(p); p=prev[p]; } return path; }
+    for(const n of (state.board.edges.get(cur)||[])){ if(prev[n]!==undefined) continue; prev[n]=cur; q.push(n); }
+  }
+  return [];
+}
+function getNeighbors(pos){ return [...(state.board.edges.get(pos)||[])]; }
+function isStart(pos){ return state.board.starts.includes(pos); }
+function renderBoard(){
+  updateResponsiveBoardScale();
+  el.boardStage.innerHTML=''; if(!state.board) return;
+  const svg=document.createElementNS('http://www.w3.org/2000/svg','svg'); svg.setAttribute('class','edges'); svg.setAttribute('viewBox',`0 0 ${COLS*CELL} ${ROWS*CELL}`);
+  const drawn=new Set();
+  for(const a of state.board.active){ for(const b of (state.board.edges.get(a)||[])){ const id=[a,b].sort().join('|'); if(drawn.has(id)) continue; drawn.add(id); const A=parseKey(a), B=parseKey(b); const line=document.createElementNS('http://www.w3.org/2000/svg','line'); line.setAttribute('x1',A.c*CELL+CELL/2); line.setAttribute('y1',A.r*CELL+CELL/2); line.setAttribute('x2',B.c*CELL+CELL/2); line.setAttribute('y2',B.r*CELL+CELL/2); line.setAttribute('class', (A.r<=2 || B.r<=2) ? 'edge main':'edge'); svg.appendChild(line);} }
+  el.boardStage.appendChild(svg);
+  for(const k of state.board.active){ const {r,c}=parseKey(k); const div=document.createElement('div'); const start=isStart(k); const finish=(k===state.board.finish); const current=state.started && state.players[state.currentPlayer]?.position===k; div.className=`cell ${start?'start':''} ${finish?'finish':''} ${current?'current':''}`; div.style.left=`${c*CELL+CELL/2}px`; div.style.top=`${r*CELL+CELL/2}px`; div.dataset.symbol = finish ? '★' : (start ? '▲' : ''); el.boardStage.appendChild(div);} 
+  state.players.filter(p=>p.position).forEach((p)=>{ const {r,c}=parseKey(p.position); const token=document.createElement('div'); token.id=`token-${p.id}`; token.className='player-token'; token.style.background=p.color; const stack = state.players.filter(x=>x.position===p.position); const idx=stack.findIndex(x=>x.id===p.id); const offsets=[[0,-10],[-10,8],[10,8]]; const off=offsets[idx]||[0,0]; token.style.left=`${c*CELL+CELL/2+off[0]}px`; token.style.top=`${r*CELL+CELL/2+off[1]}px`; el.boardStage.appendChild(token); });
+}
+function renderPlayers(){ el.playersList.innerHTML=''; state.players.forEach((p,i)=>{ const activeTurn = state.started && i===state.currentPlayer && !state.gameOver; const card=document.createElement('div'); card.className=`player-card ${activeTurn?'active':''}`; const posText = p.position ? ' · '+t('startCell')+': '+(state.board.starts.indexOf(p.position)+1) : ''; card.innerHTML=`<div class="token-dot" style="background:${p.color}"></div><div><div class="player-name">${p.name}</div><div class="player-meta">${p.status}${posText}</div></div><div class="player-meta">${activeTurn?'▶':''}</div>`; el.playersList.appendChild(card); }); }
+function renderStatus(){
+  if(!state.started){
+    el.statusText.innerHTML=`<div class="setup-hint">${getSetupGuide()}</div>`;
+    el.invalidHint.textContent='';
+    renderMoveCounter();
+    updateSetupButtons();
+    return;
+  }
+  const p=state.players[state.currentPlayer];
+  if(state.selectingStarts){
+    el.statusText.innerHTML=`<strong>${t('selectingStart')}:</strong><br><span class="player-meta">${t('startSelectionHelp')}</span>`;
+    renderMoveCounter();
+    updateSetupButtons();
+    return;
+  }
+  el.statusText.innerHTML=`<strong>${t('currentTurn')}:</strong> ${p.name}<br><strong>${t('diceLabel')}:</strong> ${state.lastDie ?? '–'}`;
+  renderMoveCounter();
+  updateSetupButtons();
+}
+
+function renderMoveCounter(){
+  if(!el.moveCounter) return;
+  const active=state.started && (state.moveMode || state.movementRemaining>0) && !state.asking && !state.gameOver;
+  el.moveCounter.textContent = active ? String(state.movementRemaining) : '–';
+  el.moveCounter.classList.toggle('inactive', !active);
+  el.moveCounter.classList.toggle('small', active && state.movementRemaining >= 10);
+  const current = state.players[state.currentPlayer];
+  if(active && current){ el.moveCounter.style.background = current.color; el.moveCounter.style.color = '#ffffff'; }
+  else { el.moveCounter.style.background=''; el.moveCounter.style.color=''; }
+}
+function getSetupGuide(){
+  const done='✅'; const wait='⬜';
+  const p1 = state.setup.playersChosen ? done : wait;
+  const p2 = state.setup.languageChosen ? done : wait;
+  const p3 = state.setup.boardChosen ? done : wait;
+  const ready = state.setup.playersChosen && state.setup.languageChosen && state.setup.boardChosen;
+  return `<strong>${t('setupTitle')}</strong><br>${p1} 1) ${t('setupPlayers')}<br>${p2} 2) ${t('setupLanguage')}<br>${p3} 3) ${t('setupBoard')}<br>${ready? '✅ 4) '+t('setupNewGameReady') : '⬜ 4) '+t('setupNewGame')}`;
+}
+function updateSetupButtons(){
+  const locked = state.started;
+  el.playerCountSelect.disabled = locked;
+  el.languageSelect.disabled = locked;
+  el.newBoardBtn.disabled = locked || !(state.setup.playersChosen && state.setup.languageChosen);
+  el.newGameBtn.disabled = !locked && !(state.setup.playersChosen && state.setup.languageChosen && state.setup.boardChosen);
+  el.newGameBtn.classList.toggle('danger', locked);
+  el.newGameBtn.classList.remove('secondary');
+  el.newGameBtn.textContent = locked ? t('abandonGame') : t('newGame');
+  el.startConfirmBtn.style.display = state.selectingStarts ? 'block' : 'none';
+  el.startConfirmBtn.disabled = !state.selectingStarts;
+  updateConfigArrow();
+}
+function updateConfigArrow(){
+  if(!el.configArrow || state.started){ el.configArrow && (el.configArrow.style.display='none'); return; }
+  let target = null;
+  if(!state.setup.playersChosen) target = document.getElementById('playersControl');
+  else if(!state.setup.languageChosen) target = document.getElementById('languageControl');
+  else if(!state.setup.boardChosen) target = el.newBoardBtn;
+  else target = el.newGameBtn;
+  if(!target){ el.configArrow.style.display='none'; return; }
+  const topRect = el.topControls.getBoundingClientRect();
+  const rect = target.getBoundingClientRect();
+  el.configArrow.style.display='block';
+  el.configArrow.style.left = `${rect.left - topRect.left + rect.width/2 - 6}px`;
+}
+function updateMoveButtons(){ if(state.selectingStarts){ el.leftBtn.disabled=true; el.rightBtn.disabled=true; el.upBtn.disabled=true; el.downBtn.disabled=true; return; } const enabled=state.moveMode && !state.busy && !state.asking && !state.gameOver; ['up','down','left','right'].forEach(dir=>{ el[dir+'Btn'].disabled=!enabled; }); }
+function updateUIStrings(){ document.documentElement.lang=state.lang; document.title='0.16'; document.getElementById('ui-title').textContent=t('title'); document.getElementById('ui-subtitle').textContent=t('subtitle'); document.getElementById('label-language').textContent=t('language'); document.getElementById('label-players').textContent=t('players'); document.getElementById('status-title').textContent=t('statusTitle'); document.getElementById('players-title').textContent=t('playersTitle'); document.getElementById('move-title').textContent=t('moveTitle'); document.getElementById('log-title').textContent=t('logTitle'); el.historyTitle.textContent=t('historyTitle'); el.viewMoreBtn.textContent=t('viewMore'); el.guardianTitle.textContent=t('guardianTitle'); document.getElementById('help-title').textContent=t('helpTitle'); el.helpContent.innerHTML=t('helpContent'); el.newBoardBtn.textContent=t('newBoard'); el.rollBtn.innerHTML=t('roll'); el.helpBtn.textContent=t('howToPlay'); el.startConfirmBtn.textContent='OK'; el.closeQuestionBtn.textContent=t('close'); el.closeHelpBtn.textContent=t('understood'); el.closeHistoryBtn.textContent=t('close'); el.victoryKicker.textContent=t('victoryKicker'); el.victoryNewGameBtn.textContent=t('newGame'); renderPlayers(); renderStatus(); renderBoard(); renderLog(); updateSetupButtons(); }
+function escapeHtml(s){ return String(s).replace(/[&<>"]/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch])); }
+function showVictory(player){
+  el.victoryTitle.textContent=t('victoryWinMessage').replace('{player}', player.name);
+  el.victoryText.textContent=t('victoryFreedom');
+  el.victoryOverlay.classList.remove('show');
+  void el.victoryOverlay.offsetWidth;
+  el.victoryOverlay.classList.add('show');
+}
+function hideVictory(){ el.victoryOverlay.classList.remove('show'); }
+function clearQuestionHUD(){ el.questionOverlay.classList.remove('show'); el.feedback.className='feedback'; el.feedback.innerHTML=''; el.questionMeta.textContent=''; el.questionText.innerHTML=''; el.questionOptions.innerHTML=''; el.closeQuestionBtn.disabled=true; el.helpOverlay.classList.remove('show'); el.historyOverlay.classList.remove('show'); }
+function assignRandomStarts(){
+  const starts = shuffle([...state.board.starts]);
+  state.players.forEach((p,i)=>{ p.position = starts[i] || starts[0]; p.status = t('waitingQuestion'); });
+  state.selectingStarts=false;
+  state.currentPlayer=0;
+  el.rollBtn.disabled=false;
+  renderBoard(); renderPlayers(); renderStatus(); updateSetupButtons(); updateMoveButtons();
+}
+function renderLog(){ const entries = state.logEntries || []; el.logText.innerHTML = entries.slice(0,3).map(msg=>`<p>${escapeHtml(msg)}</p>`).join(''); el.historyText.innerHTML = entries.map(msg=>`<p>${escapeHtml(msg)}</p>`).join(''); el.viewMoreBtn.style.display = entries.length>3 ? 'inline-flex' : 'none'; }
+function log(msg){ state.logEntries.unshift(msg); renderLog(); }
+async function animateDie(max=6){ const result=dieRoll(max); el.moveCounter.classList.remove('inactive'); el.moveCounter.classList.add('rolling'); const start=performance.now(); while(performance.now()-start<1000){ el.moveCounter.textContent=String(dieRoll(max)); await delay(90); } el.moveCounter.classList.remove('rolling'); el.moveCounter.textContent=String(result); state.lastDie=result; renderStatus(); return result; }
+async function animateTokenTo(player, pos){ player.position=pos; renderBoard(); renderPlayers(); renderStatus(); await delay(220); }
+async function handleMove(dir){
+  if(!state.moveMode || state.busy || state.asking || state.gameOver || state.selectingStarts) return;
+  const player=state.players[state.currentPlayer]; const cur=parseKey(player.position); const d=dirs[dir]; const next=key(cur.r+d[0], cur.c+d[1]);
+  el.invalidHint.textContent='';
+  if(!state.board.active.has(next) || !(state.board.edges.get(player.position)||new Set()).has(next)){ el.invalidHint.textContent=t('invalidMove'); return; }
+  state.busy=true; await animateTokenTo(player,next); state.movementRemaining=Math.max(0,state.movementRemaining-1); state.busy=false; renderStatus();
+  if(player.position===state.board.finish){
+    state.moveMode=false; updateMoveButtons(); log(`${player.name}: ${t('finalPromptMeta')}`); await delay(180); askQuestion(player, true); return;
+  }
+  if(state.movementRemaining<=0){ state.moveMode=false; updateMoveButtons(); log(`${player.name}: ${t('moveConsumed')}`); await delay(180); askQuestion(player, false); }
+}
+function hasAnyMoves(pos){ return getNeighbors(pos).length>0; }
+async function executeRoll(){
+  if(!state.started){ log(t('launchFirst')); return; }
+  if(state.selectingStarts){ return; }
+  if(state.asking || state.busy || state.moveMode || state.gameOver){ log(t('rollDisabledQuestion')); return; }
+  const player=state.players[state.currentPlayer]; if(!hasAnyMoves(player.position)){ log(t('cannotMove')); return; }
+  state.busy=true; el.rollBtn.disabled=true; el.invalidHint.textContent=''; const die=await animateDie(6); state.movementRemaining=die; player.status=t('movementReady'); state.moveMode=true; state.busy=false; renderPlayers(); renderStatus(); updateMoveButtons(); log(`${player.name}: ${t('moveWithArrows')} (${die})`); }
+function askQuestion(player, finalOnly=false){ state.asking=true; state.awaitingFinal=finalOnly; const q=getQuestion(finalOnly); state.currentQuestion=q; const loc=localizeQuestion(q); el.questionMeta.textContent=`${finalOnly?t('finalPromptMeta'):t('normalPromptMeta')} · ${t('questionNumber')} ${q.number}`; el.questionText.innerHTML=`<p><strong>${loc.question}</strong></p><p class="question-meta">${t('category')}: ${t(q.category)} · ${t('difficulty')}: ${t(q.difficulty)}</p>`; el.questionOptions.innerHTML=''; el.feedback.className='feedback'; el.feedback.innerHTML=''; el.closeQuestionBtn.disabled=true;
+  ['A','B','C','D'].forEach(letter=>{ const btn=document.createElement('button'); btn.className='option'; btn.innerHTML=`<strong>${letter}.</strong> ${loc.options[letter]}`; btn.addEventListener('click',()=>answerQuestion(letter)); el.questionOptions.appendChild(btn); });
+  el.questionOverlay.classList.add('show'); log(t('questionAfterMove')); }
+async function answerQuestion(letter){ if(!state.asking || state.busy) return; state.busy=true; const q=state.currentQuestion; const loc=localizeQuestion(q); const buttons=[...el.questionOptions.querySelectorAll('button')]; buttons.forEach(btn=>btn.disabled=true); buttons.forEach(btn=>{ const bLetter=btn.textContent.trim()[0]; if(bLetter===q.correct_answer) btn.classList.add('correct'); if(bLetter===letter && letter!==q.correct_answer) btn.classList.add('wrong'); });
+  const correct=(letter===q.correct_answer); const player=state.players[state.currentPlayer]; state.lastAnswerCorrect=correct;
+  if(correct){ el.feedback.className='feedback ok'; el.feedback.innerHTML=`<strong>${t('correct')}</strong><br>${loc.explanation}`; player.status=t('correct'); state.pendingRetreat=null; if(state.awaitingFinal && player.position===state.board.finish){ state.gameOver=true; el.winnerBox.textContent=`${player.name} ${t('won')}`; log(`${player.name} ${t('won')}`); showVictory(player); } }
+  else { el.feedback.className='feedback bad'; el.feedback.innerHTML=`<strong>${t('incorrect')}</strong><br>${loc.explanation}`; player.status=t('incorrect'); state.pendingRetreat={playerId:player.id,max:3}; }
+  el.closeQuestionBtn.disabled=false; state.busy=false; renderPlayers(); renderStatus(); }
+async function retreatPlayer(player, steps){ state.retreatMode=true; let current=player.position; const path=shortestPath(current, state.board.starts).slice(0, steps); for(const next of path){ await animateTokenTo(player,next); current=next; } log(`${player.name}: ${t('retreating')} ${path.length}`); state.retreatMode=false; }
+async function closeQuestion(){ if(state.busy) return; const pendingRetreat=state.pendingRetreat ? {...state.pendingRetreat} : null; el.questionOverlay.classList.remove('show'); state.asking=false; state.awaitingFinal=false; state.currentQuestion=null; renderPlayers(); renderStatus(); updateMoveButtons();
+  if(!state.gameOver && pendingRetreat){
+    const player=state.players.find(p=>p.id===pendingRetreat.playerId);
+    if(player){
+      state.busy=true; el.rollBtn.disabled=true; log(`${player.name}: ${t('retreatRoll')}`); const retreat=await animateDie(3); await retreatPlayer(player, retreat); state.busy=false;
+    }
+    state.pendingRetreat=null;
+  }
+  if(!state.gameOver){ nextTurn(); } else { el.rollBtn.disabled=true; }
+  renderPlayers(); renderStatus(); updateMoveButtons(); }
+function nextTurn(){ state.currentPlayer=(state.currentPlayer+1)%state.players.length; state.players.forEach((p,i)=>{ p.status = i===state.currentPlayer ? t('waitingQuestion') : t('waitingQuestion'); }); state.lastDie=null; state.movementRemaining=0; state.moveMode=false; el.rollBtn.disabled=false; renderPlayers(); renderStatus(); updateMoveButtons(); updateSetupButtons(); }
+function setupPlayers(){ const count=Number(el.playerCountSelect.value); state.players = Array.from({length:count},(_,i)=>({id:i+1,name:`${t('player')} ${i+1}`,color:PLAYER_COLORS[i],position:null,status:t('chooseStart')})); state.currentPlayer=0; }
+function resetStateForGame(){ hideVictory(); clearQuestionHUD(); state.started=true; state.gameOver=false; state.asking=false; state.busy=false; state.awaitingFinal=false; state.currentQuestion=null; state.lastDie=null; state.movementRemaining=0; state.moveMode=false; state.retreatMode=false; state.pendingRetreat=null; state.lastAnswerCorrect=null; state.selectingStarts=false; state.startChoiceIndex=0; state.startSelectPlayer=0; el.invalidHint.textContent=''; el.winnerBox.textContent=''; el.rollBtn.disabled=true; }
+function startNewGame(){ if(!state.setup.boardChosen){ renderStatus(); return; } resetQuestions(); setupPlayers(); resetStateForGame(); state.logEntries=[]; renderLog(); renderBoard(); renderPlayers(); assignRandomStarts(); log(t('newGameReady')); }
+function regenerateBoard(){ hideVictory(); clearQuestionHUD(); state.board=makeBoard(); state.setup.boardChosen=true; if(state.started) setupPlayers(); state.lastDie=null; state.movementRemaining=0; state.moveMode=false; state.busy=false; state.asking=false; state.gameOver=false; state.pendingRetreat=null; state.lastAnswerCorrect=null; state.logEntries=[]; state.selectingStarts=false; el.invalidHint.textContent=''; el.winnerBox.textContent=''; renderBoard(); renderPlayers(); renderStatus(); updateMoveButtons(); updateSetupButtons(); log(t('randomBoardReady')); }
+
+el.languageSelect.addEventListener('change',e=>{ state.lang=e.target.value || 'es'; state.setup.languageChosen=!!e.target.value; updateUIStrings(); updateSetupButtons(); renderStatus(); });
+el.newGameBtn.addEventListener('click',()=>{ if(state.started){ window.location.reload(); return; } if(!state.setup.boardChosen){ renderStatus(); return; } startNewGame(); });
+el.playerCountSelect.addEventListener('change',()=>{ state.setup.playersChosen=Number(el.playerCountSelect.value)>0; state.setup.boardChosen=false; state.board=makeBoard(); updateSetupButtons(); renderBoard(); renderStatus(); });
+el.newBoardBtn.addEventListener('click',()=>{ if(!state.setup.playersChosen || !state.setup.languageChosen){ renderStatus(); return; } regenerateBoard(); updateSetupButtons(); });
+el.rollBtn.addEventListener('click',executeRoll);
+el.helpBtn.addEventListener('click',()=>el.helpOverlay.classList.add('show'));
+el.closeHelpBtn.addEventListener('click',()=>el.helpOverlay.classList.remove('show'));
+el.viewMoreBtn.addEventListener('click',()=>el.historyOverlay.classList.add('show'));
+el.closeHistoryBtn.addEventListener('click',()=>el.historyOverlay.classList.remove('show'));
+el.victoryNewGameBtn.addEventListener('click',()=>{ hideVictory(); clearQuestionHUD(); startNewGame(); });
+el.historyOverlay.addEventListener('click',e=>{ if(e.target===el.historyOverlay) el.historyOverlay.classList.remove('show'); });
+window.addEventListener('resize',()=>{ updateResponsiveBoardScale(); updateConfigArrow(); });
+el.closeQuestionBtn.addEventListener('click',closeQuestion);
+el.questionOverlay.addEventListener('click',e=>{ if(e.target===el.questionOverlay && !el.closeQuestionBtn.disabled && !state.busy) closeQuestion(); });
+[['upBtn','up'],['downBtn','down'],['leftBtn','left'],['rightBtn','right']].forEach(([id,dir])=>el[id].addEventListener('click',()=>handleMove(dir)));
+window.addEventListener('keydown',e=>{ const map={ArrowUp:'up',ArrowDown:'down',ArrowLeft:'left',ArrowRight:'right'}; if(map[e.key]){ e.preventDefault(); handleMove(map[e.key]); } });
+
+state.lang='es'; state.board=makeBoard(); resetQuestions(); clearQuestionHUD(); updateUIStrings(); renderBoard(); renderPlayers(); renderStatus(); updateMoveButtons(); updateSetupButtons(); renderLog(); log(t('waitingStart'));
+</script>
+</body>
+</html>
