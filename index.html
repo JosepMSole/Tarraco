@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>0.37</title>
+<title>0.38</title>
 <style>
 :root{
   --bg:#16120f; --panel:#241d18; --panel2:#312721; --gold:#d9b56d; --gold2:#f4deb0;
@@ -214,7 +214,7 @@ body.in-game #newGameBtn{background:linear-gradient(180deg,#b14242,#8f2626);colo
   .menu-card .brand-logo{max-width:300px}
   .menu-stack{gap:6px}
   .menu-note{font-size:.72rem;line-height:1.15;min-height:2.1em}
-  .menu-footer{margin-top:4px;font-size:.7rem;text-align:center;width:100%;justify-self:center}
+  .menu-footer{margin-top:4px;font-size:.7rem;text-align:center;width:100%;justify-self:center;display:block;position:relative;left:50%;transform:translateX(-50%)}
   .menu-card button,.menu-card select{padding:7px 8px;font-size:.78rem;border-radius:10px}
   .menu-select-block label{font-size:.68rem}
   .top-controls{grid-template-columns:1fr 1fr;gap:5px}
@@ -222,11 +222,11 @@ body.in-game #newGameBtn{background:linear-gradient(180deg,#b14242,#8f2626);colo
   body.in-game #helpBtn, body.in-game #newGameBtn{min-width:0;width:100%;padding:8px 8px;font-size:.76rem}
   select,button{padding:7px 7px;font-size:.76rem;border-radius:10px}
   label{font-size:.64rem}
-  .game-layout{display:grid;grid-template-columns:1fr;grid-template-rows:minmax(0,56dvh) minmax(0,1fr);gap:4px;min-height:0;height:calc(100dvh - 112px)}
+  .game-layout{display:grid;grid-template-columns:1fr;grid-template-rows:minmax(0,60dvh) 124px;gap:4px;min-height:0;height:calc(100dvh - 112px);align-content:space-between}
   .board-panel{gap:2px;min-height:0}
-  .board-topbar{gap:1px;min-height:0}
+  .board-topbar{gap:1px;min-height:0;display:none}
   #winnerBox{font-size:.72rem;min-height:1em;text-align:center}
-  .board-wrapper{padding:4px 4px 5px;min-height:0;height:100%;border-radius:12px;display:flex;align-items:flex-start;justify-content:center}
+  .board-wrapper{padding:4px 4px 5px;min-height:0;height:100%;border-radius:12px;display:flex;align-items:flex-start;justify-content:center;overflow:hidden}
   .board-timer{font-size:1.7rem;top:6px;min-width:124px;padding:3px 11px;border-radius:999px}
   .board-actions{left:6px;top:8px;width:114px;gap:5px;transform:none}
   .move-counter,.board-roll-btn{width:114px;min-width:114px}
@@ -235,14 +235,14 @@ body.in-game #newGameBtn{background:linear-gradient(180deg,#b14242,#8f2626);colo
   .roll-arrow{left:62px;top:225px;font-size:2.45rem}
   .board-stage{margin-top:48px;transform:scale(var(--board-scale));transform-origin:top center}
   .player-token{width:24px;height:24px}
-  .side-panel{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-areas:"move players";gap:4px;min-width:0;align-content:start;min-height:0;overflow:hidden}
-  .status-box,.controls-box,.message-log{padding:6px;border-radius:10px;min-width:0;min-height:0}
+  .side-panel{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-areas:"move players";gap:4px;min-width:0;align-content:end;align-items:end;min-height:124px;max-height:124px;overflow:hidden;position:sticky;bottom:0}
+  .status-box,.controls-box,.message-log{padding:5px;border-radius:10px;min-width:0;min-height:0;background:rgba(0,0,0,.22)}
   .side-panel>.status-box:first-child,.message-log{display:none !important}
   .side-panel>.controls-box{grid-area:move}
-  .players-box{grid-area:players;overflow:hidden}
-  .status-title{font-size:.72rem;margin-bottom:4px}
-  .players{gap:3px;max-height:100%;overflow:hidden}
-  .player-card{padding:4px 5px;gap:5px;border-radius:8px}
+  .players-box{grid-area:players;overflow:hidden;height:100%}
+  .status-title{font-size:.66rem;margin-bottom:3px}
+  .players{gap:2px;max-height:100%;overflow:hidden}
+  .player-card{padding:3px 4px;gap:4px;border-radius:8px}
   .token-dot{width:16px;height:16px;flex-basis:16px}
   .player-name{font-size:.68rem;line-height:1.02}
   .player-meta{font-size:.53rem;line-height:1.03}
@@ -272,7 +272,7 @@ body.in-game #newGameBtn{background:linear-gradient(180deg,#b14242,#8f2626);colo
   .menu-card{width:min(92vw,296px);padding:7px 7px 9px}
   .menu-card .brand-logo{max-width:270px}
   .menu-card button,.menu-card select{padding:6px 7px;font-size:.74rem}
-  .game-layout{height:calc(100dvh - 100px);grid-template-rows:minmax(0,54dvh) minmax(0,1fr)}
+  .game-layout{height:calc(100dvh - 100px);grid-template-rows:minmax(0,61dvh) 112px}
   .board-wrapper{padding:3px 3px 4px}
   .board-timer{font-size:1.42rem;min-width:108px;padding:3px 8px;top:5px}
   .board-actions{left:4px;top:7px;width:98px;gap:4px}
@@ -282,12 +282,12 @@ body.in-game #newGameBtn{background:linear-gradient(180deg,#b14242,#8f2626);colo
   .roll-arrow{left:52px;top:195px;font-size:2.1rem}
   .board-stage{margin-top:42px}
   .player-token{width:20px;height:20px}
-  .status-box,.controls-box,.message-log{padding:5px}
-  .status-title{font-size:.64rem}
-  .controls-grid{width:108px;gap:7px}
-  .controls-grid button{height:32px;font-size:1rem}
-  .player-name{font-size:.62rem}
-  .player-meta{font-size:.49rem}
+  .status-box,.controls-box,.message-log{padding:4px}
+  .status-title{font-size:.6rem}
+  .controls-grid{width:108px;gap:8px}
+  .controls-grid button{height:34px;font-size:1.08rem}
+  .player-name{font-size:.58rem}
+  .player-meta{font-size:.46rem}
 }
 
 @media (min-width:900px){
@@ -335,7 +335,7 @@ body.in-game #newGameBtn{background:linear-gradient(180deg,#b14242,#8f2626);colo
       <a id="menuGuardianBtn" class="menu-guardian-link" href="https://www.disturbingstories.com/stories.html" target="_blank" rel="noopener noreferrer"><button type="button" class="secondary">El Guardián del Pretorio</button></a>
     </div>
     <div id="menuHint" class="menu-note">Selecciona idioma y jugadores para empezar.</div>
-    <div class="menu-footer">0.37</div>
+    <div class="menu-footer">0.38</div>
   </div>
 </div>
 
