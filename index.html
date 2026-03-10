@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>0.36</title>
+<title>0.37</title>
 <style>
 :root{
   --bg:#16120f; --panel:#241d18; --panel2:#312721; --gold:#d9b56d; --gold2:#f4deb0;
@@ -214,7 +214,7 @@ body.in-game #newGameBtn{background:linear-gradient(180deg,#b14242,#8f2626);colo
   .menu-card .brand-logo{max-width:300px}
   .menu-stack{gap:6px}
   .menu-note{font-size:.72rem;line-height:1.15;min-height:2.1em}
-  .menu-footer{margin-top:4px;font-size:.7rem}
+  .menu-footer{margin-top:4px;font-size:.7rem;text-align:center;width:100%;justify-self:center}
   .menu-card button,.menu-card select{padding:7px 8px;font-size:.78rem;border-radius:10px}
   .menu-select-block label{font-size:.68rem}
   .top-controls{grid-template-columns:1fr 1fr;gap:5px}
@@ -222,41 +222,34 @@ body.in-game #newGameBtn{background:linear-gradient(180deg,#b14242,#8f2626);colo
   body.in-game #helpBtn, body.in-game #newGameBtn{min-width:0;width:100%;padding:8px 8px;font-size:.76rem}
   select,button{padding:7px 7px;font-size:.76rem;border-radius:10px}
   label{font-size:.64rem}
-  .game-layout{display:grid;grid-template-columns:1fr;grid-template-rows:minmax(0,53dvh) minmax(0,1fr);gap:4px;min-height:0;height:calc(100dvh - 118px)}
-  .board-panel{gap:3px;min-height:0}
-  .board-topbar{gap:2px;min-height:0}
-  #winnerBox{font-size:.76rem;min-height:1em;text-align:center}
-  .board-wrapper{padding:4px 4px 6px;min-height:0;height:100%;border-radius:12px;display:flex;align-items:flex-start;justify-content:center}
-  .board-timer{font-size:1.85rem;top:6px;min-width:132px;padding:4px 12px;border-radius:999px}
-  .board-actions{left:6px;top:8px;width:126px;gap:6px;transform:none}
-  .move-counter,.board-roll-btn{width:126px;min-width:126px}
-  .move-counter{height:126px;font-size:3rem;border-radius:16px;opacity:1 !important}
-  .board-roll-btn{font-size:1.18rem;padding:12px 8px;line-height:1.02;border-radius:16px}
-  .roll-arrow{left:69px;top:248px;font-size:2.7rem}
-  .board-stage{margin-top:50px;transform:scale(var(--board-scale));transform-origin:top center}
-  .player-token{width:26px;height:26px}
-  .side-panel{display:grid;grid-template-columns:1fr 1fr;grid-template-areas:"status players" "move players" "log log";gap:4px;min-width:0;align-content:start;min-height:0;overflow:hidden}
+  .game-layout{display:grid;grid-template-columns:1fr;grid-template-rows:minmax(0,56dvh) minmax(0,1fr);gap:4px;min-height:0;height:calc(100dvh - 112px)}
+  .board-panel{gap:2px;min-height:0}
+  .board-topbar{gap:1px;min-height:0}
+  #winnerBox{font-size:.72rem;min-height:1em;text-align:center}
+  .board-wrapper{padding:4px 4px 5px;min-height:0;height:100%;border-radius:12px;display:flex;align-items:flex-start;justify-content:center}
+  .board-timer{font-size:1.7rem;top:6px;min-width:124px;padding:3px 11px;border-radius:999px}
+  .board-actions{left:6px;top:8px;width:114px;gap:5px;transform:none}
+  .move-counter,.board-roll-btn{width:114px;min-width:114px}
+  .move-counter{height:114px;font-size:2.7rem;border-radius:16px;opacity:1 !important}
+  .board-roll-btn{font-size:1.08rem;padding:10px 7px;line-height:1.02;border-radius:16px}
+  .roll-arrow{left:62px;top:225px;font-size:2.45rem}
+  .board-stage{margin-top:48px;transform:scale(var(--board-scale));transform-origin:top center}
+  .player-token{width:24px;height:24px}
+  .side-panel{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-areas:"move players";gap:4px;min-width:0;align-content:start;min-height:0;overflow:hidden}
   .status-box,.controls-box,.message-log{padding:6px;border-radius:10px;min-width:0;min-height:0}
-  .side-panel>.status-box:first-child{grid-area:status}
+  .side-panel>.status-box:first-child,.message-log{display:none !important}
   .side-panel>.controls-box{grid-area:move}
   .players-box{grid-area:players;overflow:hidden}
-  .message-log{grid-area:log}
   .status-title{font-size:.72rem;margin-bottom:4px}
-  #status-text{font-size:.66rem;line-height:1.15}
   .players{gap:3px;max-height:100%;overflow:hidden}
   .player-card{padding:4px 5px;gap:5px;border-radius:8px}
   .token-dot{width:16px;height:16px;flex-basis:16px}
   .player-name{font-size:.68rem;line-height:1.02}
   .player-meta{font-size:.53rem;line-height:1.03}
-  .controls-grid{width:92px;gap:3px}
-  .controls-grid button{height:26px;font-size:.8rem;padding:0;border-radius:8px}
-  .invalid-hint{font-size:.58rem;min-height:.9em}
+  .controls-grid{width:124px;gap:8px}
+  .controls-grid button{height:36px;font-size:1.1rem;padding:0;border-radius:10px}
+  .invalid-hint{font-size:.56rem;min-height:.8em}
   .start-confirm{font-size:.68rem;padding:5px 6px}
-  .log-preview{min-height:34px;font-size:.58rem;line-height:1.08}
-  .message-log p,.history-scroll p{font-size:.58rem;line-height:1.12;margin:0 0 4px}
-  .log-header{gap:6px;margin-bottom:4px}
-  .log-more{padding:4px 6px;font-size:.6rem}
-  .history-scroll{max-height:8.8em}
   .modal{padding:10px;border-radius:12px;max-height:78dvh}
   #guardian-title{font-size:.7rem;margin-bottom:4px}
   .question-meta,.question-submeta{font-size:.68rem}
@@ -279,23 +272,22 @@ body.in-game #newGameBtn{background:linear-gradient(180deg,#b14242,#8f2626);colo
   .menu-card{width:min(92vw,296px);padding:7px 7px 9px}
   .menu-card .brand-logo{max-width:270px}
   .menu-card button,.menu-card select{padding:6px 7px;font-size:.74rem}
-  .game-layout{height:calc(100dvh - 104px);grid-template-rows:minmax(0,51dvh) minmax(0,1fr)}
-  .board-wrapper{padding:3px 3px 5px}
-  .board-timer{font-size:1.55rem;min-width:116px;padding:3px 10px;top:5px}
-  .board-actions{left:4px;top:7px;width:108px;gap:5px}
-  .move-counter,.board-roll-btn{width:108px;min-width:108px}
-  .move-counter{height:108px;font-size:2.5rem}
-  .board-roll-btn{font-size:1rem;padding:10px 6px}
-  .roll-arrow{left:58px;top:215px;font-size:2.35rem}
-  .board-stage{margin-top:44px}
-  .player-token{width:22px;height:22px}
+  .game-layout{height:calc(100dvh - 100px);grid-template-rows:minmax(0,54dvh) minmax(0,1fr)}
+  .board-wrapper{padding:3px 3px 4px}
+  .board-timer{font-size:1.42rem;min-width:108px;padding:3px 8px;top:5px}
+  .board-actions{left:4px;top:7px;width:98px;gap:4px}
+  .move-counter,.board-roll-btn{width:98px;min-width:98px}
+  .move-counter{height:98px;font-size:2.25rem}
+  .board-roll-btn{font-size:.94rem;padding:8px 5px}
+  .roll-arrow{left:52px;top:195px;font-size:2.1rem}
+  .board-stage{margin-top:42px}
+  .player-token{width:20px;height:20px}
   .status-box,.controls-box,.message-log{padding:5px}
-  .status-title{font-size:.66rem}
-  .controls-grid{width:82px;gap:3px}
-  .controls-grid button{height:24px;font-size:.74rem}
-  .player-name{font-size:.64rem}
-  .player-meta{font-size:.5rem}
-  .log-preview{font-size:.54rem;min-height:30px}
+  .status-title{font-size:.64rem}
+  .controls-grid{width:108px;gap:7px}
+  .controls-grid button{height:32px;font-size:1rem}
+  .player-name{font-size:.62rem}
+  .player-meta{font-size:.49rem}
 }
 
 @media (min-width:900px){
@@ -343,7 +335,7 @@ body.in-game #newGameBtn{background:linear-gradient(180deg,#b14242,#8f2626);colo
       <a id="menuGuardianBtn" class="menu-guardian-link" href="https://www.disturbingstories.com/stories.html" target="_blank" rel="noopener noreferrer"><button type="button" class="secondary">El Guardián del Pretorio</button></a>
     </div>
     <div id="menuHint" class="menu-note">Selecciona idioma y jugadores para empezar.</div>
-    <div class="menu-footer">0.36</div>
+    <div class="menu-footer">0.37</div>
   </div>
 </div>
 
