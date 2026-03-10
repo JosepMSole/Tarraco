@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>0.35</title>
+<title>0.36</title>
 <style>
 :root{
   --bg:#16120f; --panel:#241d18; --panel2:#312721; --gold:#d9b56d; --gold2:#f4deb0;
@@ -200,94 +200,102 @@ body.in-game #helpBtn, body.in-game #newGameBtn{width:auto;min-width:140px}
 body.in-game #newGameBtn{background:linear-gradient(180deg,#b14242,#8f2626);color:#fff}
 
 @media (max-width:899px){
-  :root{--board-scale:.56;--counter-scale:.70}
+  :root{--board-scale:.40;--counter-scale:1}
   html,body{width:100%;max-width:100%;overflow:hidden}
   body{min-height:100dvh;overflow:hidden}
-  .app{padding:3px;min-height:100dvh;width:100%}
-  .shell{height:calc(100dvh - 6px);padding:4px;gap:4px;overflow:hidden;border-radius:14px}
-  .compact-head{gap:4px;grid-template-columns:1fr}
+  .app{padding:0;min-height:100dvh;width:100%}
+  .shell{height:100dvh;padding:4px;gap:4px;overflow:hidden;border-radius:0}
+  .compact-head{gap:4px;grid-template-columns:1fr;flex:0 0 auto}
   .brand-wrap{justify-content:center}
-  .brand-logo{max-width:340px}
-  body.in-game .brand-logo{max-width:980px}
-  .menu-card{width:min(94vw,360px);padding:10px;gap:8px}
-  .menu-card .brand-logo{max-width:380px}
-  .menu-stack{gap:7px}
-  .menu-note{font-size:.76rem;line-height:1.2}
-  .menu-card button,.menu-card select{padding:8px 9px;font-size:.82rem;border-radius:10px}
-  .menu-select-block label{font-size:.7rem}
+  .brand-logo{max-width:260px}
+  body.in-game .brand-logo{max-width:720px}
+  .menu-screen{padding:10px}
+  .menu-card{width:min(92vw,320px);padding:8px 8px 10px;gap:6px;background:transparent;border:none;box-shadow:none}
+  .menu-card .brand-logo{max-width:300px}
+  .menu-stack{gap:6px}
+  .menu-note{font-size:.72rem;line-height:1.15;min-height:2.1em}
+  .menu-footer{margin-top:4px;font-size:.7rem}
+  .menu-card button,.menu-card select{padding:7px 8px;font-size:.78rem;border-radius:10px}
+  .menu-select-block label{font-size:.68rem}
   .top-controls{grid-template-columns:1fr 1fr;gap:5px}
   body.in-game .top-controls{grid-template-columns:1fr 1fr;justify-content:stretch}
-  body.in-game #helpBtn, body.in-game #newGameBtn{min-width:0;width:100%;padding:7px 8px;font-size:.78rem}
-  select,button{padding:7px 7px;font-size:.78rem;border-radius:10px}
-  label{font-size:.66rem}
-  .game-layout{grid-template-columns:1fr;grid-template-rows:auto auto;gap:5px;min-height:0}
-  .board-panel{gap:4px;min-height:0}
-  .board-topbar{gap:2px}
-  #winnerBox{font-size:.8rem;min-height:1em;text-align:center}
-  .board-wrapper{padding:4px 4px 6px;min-height:calc(58px + (var(--cell) * 9 * var(--board-scale)) + 6px);border-radius:12px}
-  .board-timer{font-size:1.18rem;top:3px;min-width:76px;padding:2px 8px;border-radius:999px}
-  .board-actions{left:4px;top:4px;width:42px;gap:4px}
-  .move-counter,.board-roll-btn{width:42px;min-width:42px}
-  .move-counter{height:42px;font-size:1.05rem;border-radius:9px}
-  .board-roll-btn{font-size:.57rem;padding:5px 3px;line-height:.98}
-  .roll-arrow{left:24px;top:88px;font-size:1.5rem}
-  .board-stage{margin-top:42px}
-  .side-panel{display:grid;grid-template-columns:1fr 1fr;gap:4px;min-width:0}
-  .status-box,.controls-box,.message-log{padding:5px;border-radius:9px;min-width:0}
-  .status-title{font-size:.74rem;margin-bottom:4px}
-  .status-box:first-child{grid-column:1 / -1}
-  .message-log{grid-column:1 / -1}
-  .players{gap:3px}
-  .player-card{padding:4px 5px;gap:6px;border-radius:8px}
-  .token-dot{width:18px;height:18px;flex-basis:18px}
-  .player-name{font-size:.72rem;line-height:1.05}
-  .player-meta{font-size:.58rem;line-height:1.05}
-  .controls-grid{width:96px;gap:4px}
-  .controls-grid button{height:28px;font-size:.82rem;padding:0;border-radius:8px}
-  .invalid-hint{font-size:.62rem;min-height:1em}
-  .start-confirm{font-size:.72rem;padding:6px 8px}
-  .log-preview{min-height:38px;font-size:.64rem;line-height:1.15}
-  .log-header{gap:6px}
-  .log-more{padding:5px 7px;font-size:.64rem}
-  .history-scroll{max-height:8.3em}
+  body.in-game #helpBtn, body.in-game #newGameBtn{min-width:0;width:100%;padding:8px 8px;font-size:.76rem}
+  select,button{padding:7px 7px;font-size:.76rem;border-radius:10px}
+  label{font-size:.64rem}
+  .game-layout{display:grid;grid-template-columns:1fr;grid-template-rows:minmax(0,53dvh) minmax(0,1fr);gap:4px;min-height:0;height:calc(100dvh - 118px)}
+  .board-panel{gap:3px;min-height:0}
+  .board-topbar{gap:2px;min-height:0}
+  #winnerBox{font-size:.76rem;min-height:1em;text-align:center}
+  .board-wrapper{padding:4px 4px 6px;min-height:0;height:100%;border-radius:12px;display:flex;align-items:flex-start;justify-content:center}
+  .board-timer{font-size:1.85rem;top:6px;min-width:132px;padding:4px 12px;border-radius:999px}
+  .board-actions{left:6px;top:8px;width:126px;gap:6px;transform:none}
+  .move-counter,.board-roll-btn{width:126px;min-width:126px}
+  .move-counter{height:126px;font-size:3rem;border-radius:16px;opacity:1 !important}
+  .board-roll-btn{font-size:1.18rem;padding:12px 8px;line-height:1.02;border-radius:16px}
+  .roll-arrow{left:69px;top:248px;font-size:2.7rem}
+  .board-stage{margin-top:50px;transform:scale(var(--board-scale));transform-origin:top center}
+  .player-token{width:26px;height:26px}
+  .side-panel{display:grid;grid-template-columns:1fr 1fr;grid-template-areas:"status players" "move players" "log log";gap:4px;min-width:0;align-content:start;min-height:0;overflow:hidden}
+  .status-box,.controls-box,.message-log{padding:6px;border-radius:10px;min-width:0;min-height:0}
+  .side-panel>.status-box:first-child{grid-area:status}
+  .side-panel>.controls-box{grid-area:move}
+  .players-box{grid-area:players;overflow:hidden}
+  .message-log{grid-area:log}
+  .status-title{font-size:.72rem;margin-bottom:4px}
+  #status-text{font-size:.66rem;line-height:1.15}
+  .players{gap:3px;max-height:100%;overflow:hidden}
+  .player-card{padding:4px 5px;gap:5px;border-radius:8px}
+  .token-dot{width:16px;height:16px;flex-basis:16px}
+  .player-name{font-size:.68rem;line-height:1.02}
+  .player-meta{font-size:.53rem;line-height:1.03}
+  .controls-grid{width:92px;gap:3px}
+  .controls-grid button{height:26px;font-size:.8rem;padding:0;border-radius:8px}
+  .invalid-hint{font-size:.58rem;min-height:.9em}
+  .start-confirm{font-size:.68rem;padding:5px 6px}
+  .log-preview{min-height:34px;font-size:.58rem;line-height:1.08}
+  .message-log p,.history-scroll p{font-size:.58rem;line-height:1.12;margin:0 0 4px}
+  .log-header{gap:6px;margin-bottom:4px}
+  .log-more{padding:4px 6px;font-size:.6rem}
+  .history-scroll{max-height:8.8em}
   .modal{padding:10px;border-radius:12px;max-height:78dvh}
-  #guardian-title{font-size:.72rem;margin-bottom:4px}
-  .question-meta,.question-submeta{font-size:.72rem}
-  .question-main{font-size:1.02rem;min-height:3.5em;margin-bottom:8px}
+  #guardian-title{font-size:.7rem;margin-bottom:4px}
+  .question-meta,.question-submeta{font-size:.68rem}
+  .question-main{font-size:1rem;min-height:3.3em;margin-bottom:8px}
   .options{gap:5px;margin-top:8px}
-  .option{padding:7px 9px;font-size:.78rem}
-  .feedback{margin-top:8px;padding:8px 9px;min-height:42px;font-size:.76rem}
+  .option{padding:7px 8px;font-size:.76rem}
+  .feedback{margin-top:8px;padding:8px 9px;min-height:42px;font-size:.74rem}
   .feedback-head{gap:8px;margin-bottom:4px}
-  .more-info-box{min-width:52px;padding:5px 7px;font-size:.68rem;border-radius:8px}
-  .victory-card{padding:16px 12px;width:min(92vw,350px);gap:8px}
-  .victory-avatar{width:118px;height:118px}
-  .victory-title{font-size:1.28rem}
-  .victory-text,.victory-time{font-size:.88rem}
+  .more-info-box{min-width:50px;padding:5px 7px;font-size:.66rem;border-radius:8px}
+  .victory-card{padding:14px 10px;width:min(92vw,340px);gap:8px}
+  .victory-avatar{width:112px;height:112px}
+  .victory-title{font-size:1.22rem}
+  .victory-text,.victory-time{font-size:.84rem}
 }
 
 @media (max-width:420px){
-  :root{--board-scale:.50;--counter-scale:.64}
-  .brand-logo{max-width:300px}
-  body.in-game .brand-logo{max-width:860px}
-  .menu-card{width:min(94vw,330px);padding:8px}
-  .menu-card .brand-logo{max-width:330px}
-  .menu-card button,.menu-card select{padding:7px 8px;font-size:.78rem}
-  .board-wrapper{padding:3px 3px 5px;min-height:calc(52px + (var(--cell) * 9 * var(--board-scale)) + 4px)}
-  .board-timer{font-size:1rem;min-width:68px;padding:2px 7px}
-  .board-actions{left:3px;top:3px;width:38px;gap:3px}
-  .move-counter,.board-roll-btn{width:38px;min-width:38px}
-  .move-counter{height:38px;font-size:.95rem}
-  .board-roll-btn{font-size:.52rem;padding:4px 2px}
-  .roll-arrow{left:22px;top:80px;font-size:1.3rem}
-  .board-stage{margin-top:38px}
-  .side-panel{gap:3px}
-  .status-box,.controls-box,.message-log{padding:4px}
-  .status-title{font-size:.68rem}
-  .controls-grid{width:88px;gap:3px}
-  .controls-grid button{height:25px;font-size:.76rem}
-  .player-name{font-size:.68rem}
-  .player-meta{font-size:.54rem}
-  .log-preview{font-size:.60rem;min-height:34px}
+  :root{--board-scale:.35;--counter-scale:1}
+  .brand-logo{max-width:228px}
+  body.in-game .brand-logo{max-width:620px}
+  .menu-card{width:min(92vw,296px);padding:7px 7px 9px}
+  .menu-card .brand-logo{max-width:270px}
+  .menu-card button,.menu-card select{padding:6px 7px;font-size:.74rem}
+  .game-layout{height:calc(100dvh - 104px);grid-template-rows:minmax(0,51dvh) minmax(0,1fr)}
+  .board-wrapper{padding:3px 3px 5px}
+  .board-timer{font-size:1.55rem;min-width:116px;padding:3px 10px;top:5px}
+  .board-actions{left:4px;top:7px;width:108px;gap:5px}
+  .move-counter,.board-roll-btn{width:108px;min-width:108px}
+  .move-counter{height:108px;font-size:2.5rem}
+  .board-roll-btn{font-size:1rem;padding:10px 6px}
+  .roll-arrow{left:58px;top:215px;font-size:2.35rem}
+  .board-stage{margin-top:44px}
+  .player-token{width:22px;height:22px}
+  .status-box,.controls-box,.message-log{padding:5px}
+  .status-title{font-size:.66rem}
+  .controls-grid{width:82px;gap:3px}
+  .controls-grid button{height:24px;font-size:.74rem}
+  .player-name{font-size:.64rem}
+  .player-meta{font-size:.5rem}
+  .log-preview{font-size:.54rem;min-height:30px}
 }
 
 @media (min-width:900px){
@@ -335,6 +343,7 @@ body.in-game #newGameBtn{background:linear-gradient(180deg,#b14242,#8f2626);colo
       <a id="menuGuardianBtn" class="menu-guardian-link" href="https://www.disturbingstories.com/stories.html" target="_blank" rel="noopener noreferrer"><button type="button" class="secondary">El Guardián del Pretorio</button></a>
     </div>
     <div id="menuHint" class="menu-note">Selecciona idioma y jugadores para empezar.</div>
+    <div class="menu-footer">0.36</div>
   </div>
 </div>
 
@@ -474,7 +483,7 @@ body.in-game #newGameBtn{background:linear-gradient(180deg,#b14242,#8f2626);colo
 <script>
 const I18N = {
   es: {
-    title:"Tarraco Romana", subtitle:"Demo 0.35",
+    title:"Tarraco Romana", subtitle:"Demo 0.36",
     language:"Idioma", players:"Jugadores", newGame:"Nueva partida", abandonGame:"Abandonar partida", newBoard:"Nuevo tablero", roll:"Tira<br>el dado", howToPlay:"Cómo jugar", startCell:"Casilla inicial", chooseStart:"Elige tu casilla inicial", confirmStart:"Confirmar inicio",
     statusTitle:"Estado de la partida", playersTitle:"Jugadores", moveTitle:"Movimiento", boardTag:"Cuadrícula 7 × 9", rulesTag:"Sin diagonales · fallo 1-3", goalTag:"3 inicios · 1 salida", logTitle:"Crónica del Guardián", historyTitle:"Crónica completa del Guardián", viewMore:"Ver más", victoryKicker:"Victoria", victoryWinMessage:"{player} ha ganado al Guardián!", victoryFreedom:"¡Enhorabuena, eres libre!", timeLabel:"Tiempo total",
     guardianTitle:"El Guardián del Pretorio pregunta", helpTitle:"Cómo jugar", close:"Cerrar", continue:"OK", moreInfo:"+<br>INFO", understood:"Entendido",
@@ -484,12 +493,12 @@ const I18N = {
     city_identity:"Identidad de la ciudad", province_administration:"Administración provincial", archaeology_heritage:"Arqueología y patrimonio", circus:"Circo", amphitheatre:"Anfiteatro", walls:"Murallas", infrastructure:"Infraestructura", theatre:"Teatro", provincial_forum:"Foro provincial"
   },
   en: {
-    title:"Tarraco Romana", subtitle:"Demo 0.35", language:"Language", players:"Players", newGame:"New game", abandonGame:"Abandon game", newBoard:"New board", roll:"Roll<br>the die", howToPlay:"How to play", startCell:"Start cell", chooseStart:"Choose your start cell", confirmStart:"Confirm start", statusTitle:"Game status", playersTitle:"Players", moveTitle:"Movement", boardTag:"7 × 9 grid", rulesTag:"No diagonals · fail 1-3", goalTag:"3 starts · 1 exit", logTitle:"Guardian's Chronicle", historyTitle:"Full Guardian Chronicle", viewMore:"View more", victoryKicker:"Victory", victoryWinMessage:"{player} has defeated the Guardian!", victoryFreedom:"Congratulations, you are free!", timeLabel:"Total time", guardianTitle:"The Praetorium Guardian asks", helpTitle:"How to play", close:"Close", continue:"OK", moreInfo:"+<br>INFO", understood:"Understood",
+    title:"Tarraco Romana", subtitle:"Demo 0.36", language:"Language", players:"Players", newGame:"New game", abandonGame:"Abandon game", newBoard:"New board", roll:"Roll<br>the die", howToPlay:"How to play", startCell:"Start cell", chooseStart:"Choose your start cell", confirmStart:"Confirm start", statusTitle:"Game status", playersTitle:"Players", moveTitle:"Movement", boardTag:"7 × 9 grid", rulesTag:"No diagonals · fail 1-3", goalTag:"3 starts · 1 exit", logTitle:"Guardian's Chronicle", historyTitle:"Full Guardian Chronicle", viewMore:"View more", victoryKicker:"Victory", victoryWinMessage:"{player} has defeated the Guardian!", victoryFreedom:"Congratulations, you are free!", timeLabel:"Total time", guardianTitle:"The Praetorium Guardian asks", helpTitle:"How to play", close:"Close", continue:"OK", moreInfo:"+<br>INFO", understood:"Understood",
     helpContent:`<p>1. Start a game and roll the D6.</p><p>2. After rolling, move your token <strong>one cell at a time</strong> using the on-screen arrows or keyboard arrows.</p><p>3. <strong>Diagonal movement is not allowed</strong>. You can only move through connected paths.</p><p>4. You must spend <strong>all</strong> movement points.</p><p>5. When movement ends, the Guardian asks a question. If you fail, roll a <strong>1 to 3</strong> die and move back automatically toward the nearest start.</p>`,
     waitingStart:"Follow the setup steps to begin.", setupTitle:"Setup", setupPlayers:"Select number of players", setupLanguage:"Select language", setupBoard:"Click New board repeatedly and choose the board you want", setupNewGame:"Press New game", setupNewGameReady:"Press New game", selectingStart:"Assigning start cells", startSelectionHelp:"Tokens are placed automatically on the available starts.",  currentTurn:"Current turn", availableQuestions:"Available questions", diceLabel:"Last roll", movementLeft:"Movement left", moveWithArrows:"Use arrows to move", movementReady:"Move the token", waitingQuestion:"Waiting", finalPromptMeta:"Final question", normalPromptMeta:"Turn question", questionNumber:"Question", category:"Category", difficulty:"Difficulty", easy:"Easy", medium:"Medium", hard:"Hard", player:"Player", correct:"Correct!", incorrect:"Incorrect", won:"has won the game", reachedGoal:"has reached the exit", questionPoolReset:"Question deck reset.", newGameReady:"New game ready.", randomBoardReady:"Board renewed.", launchFirst:"Start a game first.", rollDisabledQuestion:"You cannot roll now.", moveConsumed:"Movement completed.", mustSpendAll:"You must spend all movement.", invalidMove:"Invalid move.", questionAfterMove:"The Guardian asks a question.", retreatRoll:"Retreat", retreating:"Retreating", chooseAnswer:"Choose an answer", finalGoal:"Single exit", nearStart:"nearest start", cannotMove:"No valid move.", city_identity:"City identity", province_administration:"Provincial administration", archaeology_heritage:"Archaeology and heritage", circus:"Circus", amphitheatre:"Amphitheatre", walls:"Walls", infrastructure:"Infrastructure", theatre:"Theatre", provincial_forum:"Provincial forum"
   },
   ca: {
-    title:"Tàrraco Romana", subtitle:"Demo 0.35", language:"Idioma", players:"Jugadors", newGame:"Nova partida", abandonGame:"Abandonar partida", newBoard:"Nou tauler", roll:"Tira<br>el dau", howToPlay:"Com jugar", startCell:"Casella inicial", chooseStart:"Escull la teva casella inicial", confirmStart:"Confirmar inici", statusTitle:"Estat de la partida", playersTitle:"Jugadors", moveTitle:"Moviment", boardTag:"Graella 7 × 9", rulesTag:"Sense diagonals · error 1-3", goalTag:"3 inicis · 1 sortida", logTitle:"Crònica del Guardià", historyTitle:"Crònica completa del Guardià", viewMore:"Ver més", victoryKicker:"Victòria", victoryWinMessage:"{player} ha guanyat al Guardià!", victoryFreedom:"Enhorabona, ets lliure!", timeLabel:"Temps total", guardianTitle:"El Guardià del Pretori pregunta", helpTitle:"Com jugar", close:"Tanca", understood:"Entès",
+    title:"Tàrraco Romana", subtitle:"Demo 0.36", language:"Idioma", players:"Jugadors", newGame:"Nova partida", abandonGame:"Abandonar partida", newBoard:"Nou tauler", roll:"Tira<br>el dau", howToPlay:"Com jugar", startCell:"Casella inicial", chooseStart:"Escull la teva casella inicial", confirmStart:"Confirmar inici", statusTitle:"Estat de la partida", playersTitle:"Jugadors", moveTitle:"Moviment", boardTag:"Graella 7 × 9", rulesTag:"Sense diagonals · error 1-3", goalTag:"3 inicis · 1 sortida", logTitle:"Crònica del Guardià", historyTitle:"Crònica completa del Guardià", viewMore:"Ver més", victoryKicker:"Victòria", victoryWinMessage:"{player} ha guanyat al Guardià!", victoryFreedom:"Enhorabona, ets lliure!", timeLabel:"Temps total", guardianTitle:"El Guardià del Pretori pregunta", helpTitle:"Com jugar", close:"Tanca", understood:"Entès",
     helpContent:`<p>1. Comença una partida i tira el D6.</p><p>2. Després de la tirada, mou la fitxa <strong>casella a casella</strong> amb les fletxes de pantalla o del teclat.</p><p>3. <strong>No es permet el moviment diagonal</strong>. Només et pots moure per camins connectats.</p><p>4. Has de gastar <strong>tot</strong> el moviment.</p><p>5. En acabar el moviment, el Guardià fa una pregunta. Si falles, tires un dau d'<strong>1 a 3</strong> i retrocedeixes automàticament cap a l'inici més proper.</p>`,
     waitingStart:"Segueix els passos per començar.", setupTitle:"Preparació", setupPlayers:"Selecciona nombre de jugadors", setupLanguage:"Selecciona idioma", setupBoard:"Clica repetidament el botó i tria el taulell que vulguis", setupNewGame:"Prem Nova partida", setupNewGameReady:"Prem Nova partida", selectingStart:"Assignant caselles inicials", startSelectionHelp:"Les fitxes es col·loquen automàticament als inicis disponibles.",  currentTurn:"Torn actual", availableQuestions:"Preguntes disponibles", diceLabel:"Darrera tirada", movementLeft:"Moviment restant", moveWithArrows:"Fes servir les fletxes per moure", movementReady:"Mou la fitxa", waitingQuestion:"En espera", finalPromptMeta:"Pregunta final", normalPromptMeta:"Pregunta del torn", questionNumber:"Pregunta", category:"Categoria", difficulty:"Dificultat", easy:"Fàcil", medium:"Mitjana", hard:"Difícil", player:"Jugador", correct:"Correcte!", incorrect:"Incorrecte", won:"ha guanyat la partida", reachedGoal:"ha arribat a la sortida", questionPoolReset:"S'ha reiniciat el conjunt de preguntes.", newGameReady:"Nova partida preparada.", randomBoardReady:"Tauler renovat.", launchFirst:"Primer inicia una partida.", rollDisabledQuestion:"Ara no es pot tirar.", moveConsumed:"Moviment completat.", mustSpendAll:"Has de gastar tot el moviment.", invalidMove:"Moviment no permès.", questionAfterMove:"El Guardià fa una pregunta.", retreatRoll:"Retrocedir", retreating:"Retrocedint", chooseAnswer:"Tria una resposta", finalGoal:"Sortida única", nearStart:"inici més proper", cannotMove:"Sense moviment vàlid.", city_identity:"Identitat de la ciutat", province_administration:"Administració provincial", archaeology_heritage:"Arqueologia i patrimoni", circus:"Circ", amphitheatre:"Amfiteatre", walls:"Muralles", infrastructure:"Infraestructura", theatre:"Teatre", provincial_forum:"Fòrum provincial"
   }
