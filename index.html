@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>0.34</title>
+<title>0.35</title>
 <style>
 :root{
   --bg:#16120f; --panel:#241d18; --panel2:#312721; --gold:#d9b56d; --gold2:#f4deb0;
@@ -200,48 +200,94 @@ body.in-game #helpBtn, body.in-game #newGameBtn{width:auto;min-width:140px}
 body.in-game #newGameBtn{background:linear-gradient(180deg,#b14242,#8f2626);color:#fff}
 
 @media (max-width:899px){
-  :root{--board-scale:.74;--counter-scale:.88}
-  .board-timer{font-size:1.72rem;top:4px;min-width:92px;padding:3px 10px}
-  .roll-arrow{left:36px;top:112px;font-size:2.15rem}
-
+  :root{--board-scale:.56;--counter-scale:.70}
+  html,body{width:100%;max-width:100%;overflow:hidden}
   body{min-height:100dvh;overflow:hidden}
-  .app{padding:4px;min-height:100dvh}
-  .shell{height:calc(100dvh - 8px);padding:6px;gap:6px;overflow:hidden}
-  .compact-head{gap:6px}
-  .brand-logo{max-width:420px}
-  body.in-game .brand-logo{max-width:1280px}
-  .menu-card .brand-logo{max-width:520px}
-  .top-controls{grid-template-columns:64px 64px repeat(3,minmax(0,1fr));gap:5px}
-  select,button{padding:7px 7px;font-size:.8rem}
-  label{font-size:.68rem}
-  .game-layout{grid-template-columns:1fr;grid-template-rows:minmax(0,1fr) auto;gap:8px;min-height:0}
-  .board-panel{gap:6px;min-height:0}
-  .board-topbar{gap:4px}
-  #winnerBox{font-size:.88rem}
-  .board-wrapper{padding:6px 6px 8px;min-height:calc(76px + (var(--cell) * 9 * var(--board-scale)) + 8px)}
-  .board-actions{left:6px;top:6px}
-  .move-counter,.board-roll-btn{width:56px;min-width:56px}
-  .move-counter{height:56px;font-size:1.45rem;border-radius:11px}
-  .board-roll-btn{font-size:.74rem;padding:7px 6px}
-  .board-stage{margin-top:66px}
-  .side-panel{display:grid;grid-template-columns:1fr 1fr;gap:6px}
-  .status-box,.controls-box,.message-log{padding:7px;border-radius:11px}
-  .controls-box{order:2}
-  .players-box{order:1}
+  .app{padding:3px;min-height:100dvh;width:100%}
+  .shell{height:calc(100dvh - 6px);padding:4px;gap:4px;overflow:hidden;border-radius:14px}
+  .compact-head{gap:4px;grid-template-columns:1fr}
+  .brand-wrap{justify-content:center}
+  .brand-logo{max-width:340px}
+  body.in-game .brand-logo{max-width:980px}
+  .menu-card{width:min(94vw,360px);padding:10px;gap:8px}
+  .menu-card .brand-logo{max-width:380px}
+  .menu-stack{gap:7px}
+  .menu-note{font-size:.76rem;line-height:1.2}
+  .menu-card button,.menu-card select{padding:8px 9px;font-size:.82rem;border-radius:10px}
+  .menu-select-block label{font-size:.7rem}
+  .top-controls{grid-template-columns:1fr 1fr;gap:5px}
+  body.in-game .top-controls{grid-template-columns:1fr 1fr;justify-content:stretch}
+  body.in-game #helpBtn, body.in-game #newGameBtn{min-width:0;width:100%;padding:7px 8px;font-size:.78rem}
+  select,button{padding:7px 7px;font-size:.78rem;border-radius:10px}
+  label{font-size:.66rem}
+  .game-layout{grid-template-columns:1fr;grid-template-rows:auto auto;gap:5px;min-height:0}
+  .board-panel{gap:4px;min-height:0}
+  .board-topbar{gap:2px}
+  #winnerBox{font-size:.8rem;min-height:1em;text-align:center}
+  .board-wrapper{padding:4px 4px 6px;min-height:calc(58px + (var(--cell) * 9 * var(--board-scale)) + 6px);border-radius:12px}
+  .board-timer{font-size:1.18rem;top:3px;min-width:76px;padding:2px 8px;border-radius:999px}
+  .board-actions{left:4px;top:4px;width:42px;gap:4px}
+  .move-counter,.board-roll-btn{width:42px;min-width:42px}
+  .move-counter{height:42px;font-size:1.05rem;border-radius:9px}
+  .board-roll-btn{font-size:.57rem;padding:5px 3px;line-height:.98}
+  .roll-arrow{left:24px;top:88px;font-size:1.5rem}
+  .board-stage{margin-top:42px}
+  .side-panel{display:grid;grid-template-columns:1fr 1fr;gap:4px;min-width:0}
+  .status-box,.controls-box,.message-log{padding:5px;border-radius:9px;min-width:0}
+  .status-title{font-size:.74rem;margin-bottom:4px}
   .status-box:first-child{grid-column:1 / -1}
   .message-log{grid-column:1 / -1}
-  .players{gap:4px}
-  .player-card{padding:5px 6px}
-  .player-name{font-size:.82rem}
-  .player-meta{font-size:.67rem}
-  .controls-grid{width:116px;gap:5px}
-  .controls-grid button{height:34px;font-size:.94rem;padding:0}
-  .log-preview{min-height:48px;font-size:.74rem}
-  .history-scroll{max-height:9.4em}
-  .modal{padding:12px;border-radius:14px;max-height:82dvh}
-  .options{gap:6px;margin-top:10px}
-  .option{padding:8px 10px;font-size:.84rem}
-  .feedback{margin-top:10px;padding:10px 11px;min-height:48px;font-size:.84rem}
+  .players{gap:3px}
+  .player-card{padding:4px 5px;gap:6px;border-radius:8px}
+  .token-dot{width:18px;height:18px;flex-basis:18px}
+  .player-name{font-size:.72rem;line-height:1.05}
+  .player-meta{font-size:.58rem;line-height:1.05}
+  .controls-grid{width:96px;gap:4px}
+  .controls-grid button{height:28px;font-size:.82rem;padding:0;border-radius:8px}
+  .invalid-hint{font-size:.62rem;min-height:1em}
+  .start-confirm{font-size:.72rem;padding:6px 8px}
+  .log-preview{min-height:38px;font-size:.64rem;line-height:1.15}
+  .log-header{gap:6px}
+  .log-more{padding:5px 7px;font-size:.64rem}
+  .history-scroll{max-height:8.3em}
+  .modal{padding:10px;border-radius:12px;max-height:78dvh}
+  #guardian-title{font-size:.72rem;margin-bottom:4px}
+  .question-meta,.question-submeta{font-size:.72rem}
+  .question-main{font-size:1.02rem;min-height:3.5em;margin-bottom:8px}
+  .options{gap:5px;margin-top:8px}
+  .option{padding:7px 9px;font-size:.78rem}
+  .feedback{margin-top:8px;padding:8px 9px;min-height:42px;font-size:.76rem}
+  .feedback-head{gap:8px;margin-bottom:4px}
+  .more-info-box{min-width:52px;padding:5px 7px;font-size:.68rem;border-radius:8px}
+  .victory-card{padding:16px 12px;width:min(92vw,350px);gap:8px}
+  .victory-avatar{width:118px;height:118px}
+  .victory-title{font-size:1.28rem}
+  .victory-text,.victory-time{font-size:.88rem}
+}
+
+@media (max-width:420px){
+  :root{--board-scale:.50;--counter-scale:.64}
+  .brand-logo{max-width:300px}
+  body.in-game .brand-logo{max-width:860px}
+  .menu-card{width:min(94vw,330px);padding:8px}
+  .menu-card .brand-logo{max-width:330px}
+  .menu-card button,.menu-card select{padding:7px 8px;font-size:.78rem}
+  .board-wrapper{padding:3px 3px 5px;min-height:calc(52px + (var(--cell) * 9 * var(--board-scale)) + 4px)}
+  .board-timer{font-size:1rem;min-width:68px;padding:2px 7px}
+  .board-actions{left:3px;top:3px;width:38px;gap:3px}
+  .move-counter,.board-roll-btn{width:38px;min-width:38px}
+  .move-counter{height:38px;font-size:.95rem}
+  .board-roll-btn{font-size:.52rem;padding:4px 2px}
+  .roll-arrow{left:22px;top:80px;font-size:1.3rem}
+  .board-stage{margin-top:38px}
+  .side-panel{gap:3px}
+  .status-box,.controls-box,.message-log{padding:4px}
+  .status-title{font-size:.68rem}
+  .controls-grid{width:88px;gap:3px}
+  .controls-grid button{height:25px;font-size:.76rem}
+  .player-name{font-size:.68rem}
+  .player-meta{font-size:.54rem}
+  .log-preview{font-size:.60rem;min-height:34px}
 }
 
 @media (min-width:900px){
@@ -267,7 +313,7 @@ body.in-game #newGameBtn{background:linear-gradient(180deg,#b14242,#8f2626);colo
     <div class="menu-stack" id="menuStack">
       <div id="menuConfigArrow" class="menu-config-arrow" aria-hidden="true">➜</div>
       <div class="menu-select-block" id="menuLanguageBlock">
-        <label for="menuLanguageSelect">Idioma</label>
+        <label id="menuLabelLanguage" for="menuLanguageSelect">Idioma</label>
         <select id="menuLanguageSelect">
           <option value="">—</option>
           <option value="es">Castellano</option>
@@ -276,7 +322,7 @@ body.in-game #newGameBtn{background:linear-gradient(180deg,#b14242,#8f2626);colo
         </select>
       </div>
       <div class="menu-select-block" id="menuPlayersBlock">
-        <label for="menuPlayerCountSelect">Jugadores</label>
+        <label id="menuLabelPlayers" for="menuPlayerCountSelect">Jugadores</label>
         <select id="menuPlayerCountSelect">
           <option value="">—</option>
           <option value="1">1</option>
@@ -428,7 +474,7 @@ body.in-game #newGameBtn{background:linear-gradient(180deg,#b14242,#8f2626);colo
 <script>
 const I18N = {
   es: {
-    title:"Tarraco Romana", subtitle:"Demo 0.34",
+    title:"Tarraco Romana", subtitle:"Demo 0.35",
     language:"Idioma", players:"Jugadores", newGame:"Nueva partida", abandonGame:"Abandonar partida", newBoard:"Nuevo tablero", roll:"Tira<br>el dado", howToPlay:"Cómo jugar", startCell:"Casilla inicial", chooseStart:"Elige tu casilla inicial", confirmStart:"Confirmar inicio",
     statusTitle:"Estado de la partida", playersTitle:"Jugadores", moveTitle:"Movimiento", boardTag:"Cuadrícula 7 × 9", rulesTag:"Sin diagonales · fallo 1-3", goalTag:"3 inicios · 1 salida", logTitle:"Crónica del Guardián", historyTitle:"Crónica completa del Guardián", viewMore:"Ver más", victoryKicker:"Victoria", victoryWinMessage:"{player} ha ganado al Guardián!", victoryFreedom:"¡Enhorabuena, eres libre!", timeLabel:"Tiempo total",
     guardianTitle:"El Guardián del Pretorio pregunta", helpTitle:"Cómo jugar", close:"Cerrar", continue:"OK", moreInfo:"+<br>INFO", understood:"Entendido",
@@ -438,12 +484,12 @@ const I18N = {
     city_identity:"Identidad de la ciudad", province_administration:"Administración provincial", archaeology_heritage:"Arqueología y patrimonio", circus:"Circo", amphitheatre:"Anfiteatro", walls:"Murallas", infrastructure:"Infraestructura", theatre:"Teatro", provincial_forum:"Foro provincial"
   },
   en: {
-    title:"Tarraco Romana", subtitle:"Demo 0.34", language:"Language", players:"Players", newGame:"New game", abandonGame:"Abandon game", newBoard:"New board", roll:"Roll<br>the die", howToPlay:"How to play", startCell:"Start cell", chooseStart:"Choose your start cell", confirmStart:"Confirm start", statusTitle:"Game status", playersTitle:"Players", moveTitle:"Movement", boardTag:"7 × 9 grid", rulesTag:"No diagonals · fail 1-3", goalTag:"3 starts · 1 exit", logTitle:"Guardian's Chronicle", historyTitle:"Full Guardian Chronicle", viewMore:"View more", victoryKicker:"Victory", victoryWinMessage:"{player} has defeated the Guardian!", victoryFreedom:"Congratulations, you are free!", timeLabel:"Total time", guardianTitle:"The Praetorium Guardian asks", helpTitle:"How to play", close:"Close", continue:"OK", moreInfo:"+<br>INFO", understood:"Understood",
+    title:"Tarraco Romana", subtitle:"Demo 0.35", language:"Language", players:"Players", newGame:"New game", abandonGame:"Abandon game", newBoard:"New board", roll:"Roll<br>the die", howToPlay:"How to play", startCell:"Start cell", chooseStart:"Choose your start cell", confirmStart:"Confirm start", statusTitle:"Game status", playersTitle:"Players", moveTitle:"Movement", boardTag:"7 × 9 grid", rulesTag:"No diagonals · fail 1-3", goalTag:"3 starts · 1 exit", logTitle:"Guardian's Chronicle", historyTitle:"Full Guardian Chronicle", viewMore:"View more", victoryKicker:"Victory", victoryWinMessage:"{player} has defeated the Guardian!", victoryFreedom:"Congratulations, you are free!", timeLabel:"Total time", guardianTitle:"The Praetorium Guardian asks", helpTitle:"How to play", close:"Close", continue:"OK", moreInfo:"+<br>INFO", understood:"Understood",
     helpContent:`<p>1. Start a game and roll the D6.</p><p>2. After rolling, move your token <strong>one cell at a time</strong> using the on-screen arrows or keyboard arrows.</p><p>3. <strong>Diagonal movement is not allowed</strong>. You can only move through connected paths.</p><p>4. You must spend <strong>all</strong> movement points.</p><p>5. When movement ends, the Guardian asks a question. If you fail, roll a <strong>1 to 3</strong> die and move back automatically toward the nearest start.</p>`,
     waitingStart:"Follow the setup steps to begin.", setupTitle:"Setup", setupPlayers:"Select number of players", setupLanguage:"Select language", setupBoard:"Click New board repeatedly and choose the board you want", setupNewGame:"Press New game", setupNewGameReady:"Press New game", selectingStart:"Assigning start cells", startSelectionHelp:"Tokens are placed automatically on the available starts.",  currentTurn:"Current turn", availableQuestions:"Available questions", diceLabel:"Last roll", movementLeft:"Movement left", moveWithArrows:"Use arrows to move", movementReady:"Move the token", waitingQuestion:"Waiting", finalPromptMeta:"Final question", normalPromptMeta:"Turn question", questionNumber:"Question", category:"Category", difficulty:"Difficulty", easy:"Easy", medium:"Medium", hard:"Hard", player:"Player", correct:"Correct!", incorrect:"Incorrect", won:"has won the game", reachedGoal:"has reached the exit", questionPoolReset:"Question deck reset.", newGameReady:"New game ready.", randomBoardReady:"Board renewed.", launchFirst:"Start a game first.", rollDisabledQuestion:"You cannot roll now.", moveConsumed:"Movement completed.", mustSpendAll:"You must spend all movement.", invalidMove:"Invalid move.", questionAfterMove:"The Guardian asks a question.", retreatRoll:"Retreat", retreating:"Retreating", chooseAnswer:"Choose an answer", finalGoal:"Single exit", nearStart:"nearest start", cannotMove:"No valid move.", city_identity:"City identity", province_administration:"Provincial administration", archaeology_heritage:"Archaeology and heritage", circus:"Circus", amphitheatre:"Amphitheatre", walls:"Walls", infrastructure:"Infrastructure", theatre:"Theatre", provincial_forum:"Provincial forum"
   },
   ca: {
-    title:"Tàrraco Romana", subtitle:"Demo 0.34", language:"Idioma", players:"Jugadors", newGame:"Nova partida", abandonGame:"Abandonar partida", newBoard:"Nou tauler", roll:"Tira<br>el dau", howToPlay:"Com jugar", startCell:"Casella inicial", chooseStart:"Escull la teva casella inicial", confirmStart:"Confirmar inici", statusTitle:"Estat de la partida", playersTitle:"Jugadors", moveTitle:"Moviment", boardTag:"Graella 7 × 9", rulesTag:"Sense diagonals · error 1-3", goalTag:"3 inicis · 1 sortida", logTitle:"Crònica del Guardià", historyTitle:"Crònica completa del Guardià", viewMore:"Ver més", victoryKicker:"Victòria", victoryWinMessage:"{player} ha guanyat al Guardià!", victoryFreedom:"Enhorabona, ets lliure!", timeLabel:"Temps total", guardianTitle:"El Guardià del Pretori pregunta", helpTitle:"Com jugar", close:"Tanca", understood:"Entès",
+    title:"Tàrraco Romana", subtitle:"Demo 0.35", language:"Idioma", players:"Jugadors", newGame:"Nova partida", abandonGame:"Abandonar partida", newBoard:"Nou tauler", roll:"Tira<br>el dau", howToPlay:"Com jugar", startCell:"Casella inicial", chooseStart:"Escull la teva casella inicial", confirmStart:"Confirmar inici", statusTitle:"Estat de la partida", playersTitle:"Jugadors", moveTitle:"Moviment", boardTag:"Graella 7 × 9", rulesTag:"Sense diagonals · error 1-3", goalTag:"3 inicis · 1 sortida", logTitle:"Crònica del Guardià", historyTitle:"Crònica completa del Guardià", viewMore:"Ver més", victoryKicker:"Victòria", victoryWinMessage:"{player} ha guanyat al Guardià!", victoryFreedom:"Enhorabona, ets lliure!", timeLabel:"Temps total", guardianTitle:"El Guardià del Pretori pregunta", helpTitle:"Com jugar", close:"Tanca", understood:"Entès",
     helpContent:`<p>1. Comença una partida i tira el D6.</p><p>2. Després de la tirada, mou la fitxa <strong>casella a casella</strong> amb les fletxes de pantalla o del teclat.</p><p>3. <strong>No es permet el moviment diagonal</strong>. Només et pots moure per camins connectats.</p><p>4. Has de gastar <strong>tot</strong> el moviment.</p><p>5. En acabar el moviment, el Guardià fa una pregunta. Si falles, tires un dau d'<strong>1 a 3</strong> i retrocedeixes automàticament cap a l'inici més proper.</p>`,
     waitingStart:"Segueix els passos per començar.", setupTitle:"Preparació", setupPlayers:"Selecciona nombre de jugadors", setupLanguage:"Selecciona idioma", setupBoard:"Clica repetidament el botó i tria el taulell que vulguis", setupNewGame:"Prem Nova partida", setupNewGameReady:"Prem Nova partida", selectingStart:"Assignant caselles inicials", startSelectionHelp:"Les fitxes es col·loquen automàticament als inicis disponibles.",  currentTurn:"Torn actual", availableQuestions:"Preguntes disponibles", diceLabel:"Darrera tirada", movementLeft:"Moviment restant", moveWithArrows:"Fes servir les fletxes per moure", movementReady:"Mou la fitxa", waitingQuestion:"En espera", finalPromptMeta:"Pregunta final", normalPromptMeta:"Pregunta del torn", questionNumber:"Pregunta", category:"Categoria", difficulty:"Dificultat", easy:"Fàcil", medium:"Mitjana", hard:"Difícil", player:"Jugador", correct:"Correcte!", incorrect:"Incorrecte", won:"ha guanyat la partida", reachedGoal:"ha arribat a la sortida", questionPoolReset:"S'ha reiniciat el conjunt de preguntes.", newGameReady:"Nova partida preparada.", randomBoardReady:"Tauler renovat.", launchFirst:"Primer inicia una partida.", rollDisabledQuestion:"Ara no es pot tirar.", moveConsumed:"Moviment completat.", mustSpendAll:"Has de gastar tot el moviment.", invalidMove:"Moviment no permès.", questionAfterMove:"El Guardià fa una pregunta.", retreatRoll:"Retrocedir", retreating:"Retrocedint", chooseAnswer:"Tria una resposta", finalGoal:"Sortida única", nearStart:"inici més proper", cannotMove:"Sense moviment vàlid.", city_identity:"Identitat de la ciutat", province_administration:"Administració provincial", archaeology_heritage:"Arqueologia i patrimoni", circus:"Circ", amphitheatre:"Amfiteatre", walls:"Muralles", infrastructure:"Infraestructura", theatre:"Teatre", provincial_forum:"Fòrum provincial"
   }
@@ -706,7 +752,7 @@ function updateConfigArrow(){
   el.configArrow.style.left = `${rect.left - topRect.left + rect.width/2 - 6}px`;
 }
 function updateMoveButtons(){ if(state.selectingStarts){ el.leftBtn.disabled=true; el.rightBtn.disabled=true; el.upBtn.disabled=true; el.downBtn.disabled=true; return; } const enabled=state.moveMode && !state.busy && !state.asking && !state.gameOver; ['up','down','left','right'].forEach(dir=>{ el[dir+'Btn'].disabled=!enabled; }); }
-function updateUIStrings(){ document.documentElement.lang=state.lang; document.title='0.34'; document.getElementById('ui-title').textContent=t('title'); document.getElementById('ui-subtitle').textContent=t('subtitle'); document.getElementById('label-language').textContent=t('language'); document.getElementById('label-players').textContent=t('players'); document.getElementById('status-title').textContent=t('statusTitle'); document.getElementById('players-title').textContent=t('playersTitle'); document.getElementById('move-title').textContent=t('moveTitle'); document.getElementById('log-title').textContent=t('logTitle'); el.historyTitle.textContent=t('historyTitle'); el.viewMoreBtn.textContent=t('viewMore'); el.guardianTitle.textContent=t('guardianTitle'); document.getElementById('help-title').textContent=t('helpTitle'); el.helpContent.innerHTML=t('helpContent'); el.newBoardBtn.textContent=t('newBoard'); el.rollBtn.innerHTML=t('roll'); el.helpBtn.textContent=t('howToPlay'); el.startConfirmBtn.textContent='OK'; el.closeQuestionBtn.textContent='OK'; el.closeHelpBtn.textContent=t('understood'); el.closeHistoryBtn.textContent=t('close'); el.victoryKicker.textContent=t('victoryKicker'); el.victoryNewGameBtn.textContent=t('newGame'); if(el.menuStartBtn) el.menuStartBtn.textContent=t('newGame'); if(el.menuHelpBtn) el.menuHelpBtn.textContent=t('howToPlay'); if(el.menuHint) el.menuHint.textContent=t('waitingStart'); updateLogos(); renderPlayers(); renderStatus(); renderBoard(); renderLog(); updateSetupButtons(); updateMenuConfigArrow(); }
+function updateUIStrings(){ document.documentElement.lang=state.lang; document.title='0.35'; document.getElementById('ui-title').textContent=t('title'); document.getElementById('ui-subtitle').textContent=t('subtitle'); document.getElementById('label-language').textContent=t('language'); document.getElementById('label-players').textContent=t('players'); document.getElementById('status-title').textContent=t('statusTitle'); document.getElementById('players-title').textContent=t('playersTitle'); document.getElementById('move-title').textContent=t('moveTitle'); document.getElementById('log-title').textContent=t('logTitle'); el.historyTitle.textContent=t('historyTitle'); el.viewMoreBtn.textContent=t('viewMore'); el.guardianTitle.textContent=t('guardianTitle'); document.getElementById('help-title').textContent=t('helpTitle'); el.helpContent.innerHTML=t('helpContent'); el.newBoardBtn.textContent=t('newBoard'); el.rollBtn.innerHTML=t('roll'); el.helpBtn.textContent=t('howToPlay'); el.startConfirmBtn.textContent='OK'; el.closeQuestionBtn.textContent='OK'; el.closeHelpBtn.textContent=t('understood'); el.closeHistoryBtn.textContent=t('close'); el.victoryKicker.textContent=t('victoryKicker'); el.victoryNewGameBtn.textContent=t('newGame'); if(el.menuStartBtn) el.menuStartBtn.textContent=t('newGame'); if(el.menuHelpBtn) el.menuHelpBtn.textContent=t('howToPlay'); if(el.menuHint) el.menuHint.textContent=t('waitingStart'); updateLogos(); renderPlayers(); renderStatus(); renderBoard(); renderLog(); updateSetupButtons(); updateMenuConfigArrow(); }
 function escapeHtml(s){ return String(s).replace(/[&<>"]/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch])); }
 function showVictory(player){
   stopBoardTimer();
