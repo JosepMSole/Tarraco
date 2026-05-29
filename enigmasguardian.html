@@ -422,6 +422,45 @@ body.in-game #newGameBtn{background:linear-gradient(180deg,#b14242,#8f2626);colo
   .leaderboard-time{font-size:.84rem}
 }
 
+
+/* Mobile-only refinements for v1.17 */
+.modal{position:relative}
+.mobile-help-close{display:none}
+@media (max-width:899px){
+  body.in-game #newGameBtn{font-weight:900;letter-spacing:.02em;text-transform:uppercase}
+  #helpOverlay .modal{padding-top:48px}
+  .mobile-help-close{
+    position:absolute;top:8px;right:8px;z-index:3;
+    display:flex;align-items:center;justify-content:center;
+    width:44px;height:44px;padding:0;border-radius:14px;
+    background:rgba(12,9,7,.72);color:#fff2cf;
+    border:1px solid rgba(244,222,176,.28);
+    font-size:2rem;line-height:1;font-weight:1000;
+    box-shadow:0 8px 22px rgba(0,0,0,.32);
+  }
+  .game-layout{grid-template-rows:minmax(0,1fr) 148px;height:calc(100dvh - 112px)}
+  .board-wrapper{
+    width:100%;height:min(100%, 100vw);aspect-ratio:1/1;max-height:100%;
+    align-self:start;justify-self:center;align-items:flex-start;
+    background-size:contain;background-position:center center;background-repeat:no-repeat;background-color:#100d0b;
+  }
+  .board-stage{margin-top:34px;transform:scale(var(--board-scale));transform-origin:top center}
+  .side-panel{height:148px;align-items:stretch;align-content:stretch}
+  .side-panel>.controls-box,.players-box{height:100%;align-self:stretch}
+  .players-box{display:flex;flex-direction:column}
+  .players-box .players{height:100%;max-height:none;overflow:hidden}
+  .controls-grid{width:132px;gap:8px}
+  .controls-grid button{height:42px;font-size:3.15rem;line-height:.66;padding:0;display:flex;align-items:center;justify-content:center}
+}
+@media (max-width:420px){
+  :root{--board-scale:.31;--counter-scale:1}
+  .game-layout{grid-template-rows:minmax(0,1fr) 140px;height:calc(100dvh - 100px)}
+  .side-panel{height:140px}
+  .board-stage{margin-top:32px}
+  .controls-grid{width:118px;gap:8px}
+  .controls-grid button{height:39px;font-size:2.9rem;line-height:.62}
+}
+
 </style>
 </head>
 <body>
@@ -580,6 +619,7 @@ body.in-game #newGameBtn{background:linear-gradient(180deg,#b14242,#8f2626);colo
 
 <div id="helpOverlay" class="overlay">
   <div class="modal">
+    <button type="button" id="closeHelpXBtn" class="mobile-help-close" aria-label="Cerrar">×</button>
     <h2 id="help-title">Cómo jugar</h2>
     <div id="help-content"></div>
     <div class="modal-actions"><button id="closeHelpBtn">Entendido</button></div>
@@ -7477,11 +7517,13 @@ const el = {
   moveCounter:document.getElementById('moveCounter'), invalidHint:document.getElementById('invalidHint'),
   upBtn:document.getElementById('upBtn'), downBtn:document.getElementById('downBtn'), leftBtn:document.getElementById('leftBtn'), rightBtn:document.getElementById('rightBtn'),
   questionOverlay:document.getElementById('questionOverlay'), guardianTitle:document.getElementById('guardian-title'), questionMeta:document.getElementById('questionMeta'), questionText:document.getElementById('questionText'), questionOptions:document.getElementById('questionOptions'), feedback:document.getElementById('feedback'), closeQuestionBtn:document.getElementById('closeQuestionBtn'), movementBox:document.getElementById('movementBox'),
-  helpOverlay:document.getElementById('helpOverlay'), closeHelpBtn:document.getElementById('closeHelpBtn'), helpContent:document.getElementById('help-content'),
+  helpOverlay:document.getElementById('helpOverlay'), closeHelpBtn:document.getElementById('closeHelpBtn'), closeHelpXBtn:document.getElementById('closeHelpXBtn'), helpContent:document.getElementById('help-content'),
   viewMoreBtn:document.getElementById('viewMoreBtn'), historyOverlay:document.getElementById('historyOverlay'), historyTitle:document.getElementById('history-title'), historyText:document.getElementById('historyText'), closeHistoryBtn:document.getElementById('closeHistoryBtn'), victoryOverlay:document.getElementById('victoryOverlay'), victoryKicker:document.getElementById('victoryKicker'), victorySprite:document.getElementById('victorySprite'), victoryTitle:document.getElementById('victoryTitle'), victoryText:document.getElementById('victoryText'), victoryNewGameBtn:document.getElementById('victoryNewGameBtn'), victoryLeaderboardBtn:document.getElementById('victoryLeaderboardBtn'), victoryMenuBtn:document.getElementById('victoryMenuBtn'), boardTimer:document.getElementById('boardTimer'), victoryTime:document.getElementById('victoryTime'), startConfirmBtn:document.getElementById('startConfirmBtn'), configArrow:document.getElementById('configArrow'), topControls:document.getElementById('topControls'), rollArrow:document.getElementById('rollArrow'), leaderboardOverlay:document.getElementById('leaderboardOverlay'), leaderboardTitle:document.getElementById('leaderboardTitle'), leaderboardNote:document.getElementById('leaderboardNote'), leaderboardFooter:document.getElementById('leaderboardFooter'), leaderboardList:document.getElementById('leaderboardList'), snapshotBtn:document.getElementById('snapshotBtn'), closeLeaderboardBtn:document.getElementById('closeLeaderboardBtn'), victoryNameLabel:document.getElementById('victoryNameLabel'), victoryNameInput:document.getElementById('victoryNameInput'), victoryNameHint:document.getElementById('victoryNameHint'), audioMenuBtn:document.getElementById('audioMenuBtn'), audioOverlay:document.getElementById('audioOverlay'), audioTitle:document.getElementById('audioTitle'), closeAudioBtn:document.getElementById('closeAudioBtn'), menuAudioToggle:document.getElementById('menuAudioToggle'), menuAudioVolume:document.getElementById('menuAudioVolume'), menuAudioVolumeLabel:document.getElementById('menuAudioVolumeLabel'), masterAudioToggle:document.getElementById('masterAudioToggle'), masterVolume:document.getElementById('masterVolume'), musicAudioToggle:document.getElementById('musicAudioToggle'), musicVolume:document.getElementById('musicVolume'), effectsAudioToggle:document.getElementById('effectsAudioToggle'), effectsVolume:document.getElementById('effectsVolume'), audioMasterTitle:document.getElementById('audioMasterTitle'), audioMasterNote:document.getElementById('audioMasterNote'), audioMusicTitle:document.getElementById('audioMusicTitle'), audioMusicNote:document.getElementById('audioMusicNote'), audioEffectsTitle:document.getElementById('audioEffectsTitle'), audioEffectsNote:document.getElementById('audioEffectsNote'), screenFlash:document.getElementById('screenFlash'), deathNotice:document.getElementById('deathNotice'), deathNoticeText:document.getElementById('deathNoticeText'), loseOverlay:document.getElementById('loseOverlay'), loseTitle:document.getElementById('loseTitle'), loseText:document.getElementById('loseText'), startTransitionOverlay:document.getElementById('startTransitionOverlay')
 };
 
 const t = k => I18N[state.lang][k] ?? k;
+function isMobileLayout(){ return !!(window.matchMedia && window.matchMedia('(max-width:899px)').matches); }
+function mobileAbandonLabel(){ return state.lang==='ca' ? 'SORTIR' : (state.lang==='en' ? 'EXT' : 'SALIR'); }
 const delay = ms => new Promise(r=>setTimeout(r,ms));
 const key = (r,c)=>`${r},${c}`;
 const parseKey = k => ({r:Number(k.split(',')[0]), c:Number(k.split(',')[1])});
@@ -7908,7 +7950,7 @@ function updateSetupButtons(){
   el.newGameBtn.disabled = !locked && !(state.setup.playersChosen && state.setup.languageChosen && state.setup.boardChosen);
   el.newGameBtn.classList.toggle('danger', locked);
   el.newGameBtn.classList.remove('secondary');
-  el.newGameBtn.textContent = locked ? t('abandonGame') : t('newGame');
+  el.newGameBtn.textContent = locked ? (isMobileLayout() ? mobileAbandonLabel() : t('abandonGame')) : t('newGame');
   el.startConfirmBtn.style.display = state.selectingStarts ? 'block' : 'none';
   el.startConfirmBtn.disabled = !state.selectingStarts;
   updateConfigArrow();
@@ -8933,6 +8975,7 @@ if(el.masterVolume) el.masterVolume.addEventListener('input',e=>{ state.audio.ma
 if(el.musicVolume) el.musicVolume.addEventListener('input',e=>{ state.audio.musicVolume=Number(e.target.value)/100; markAudioControlSelected(el.musicVolume); refreshAudioForContext(); });
 if(el.effectsVolume) el.effectsVolume.addEventListener('input',e=>{ state.audio.effectsVolume=Number(e.target.value)/100; markAudioControlSelected(el.effectsVolume); refreshAudioForContext(); });
 el.closeHelpBtn.addEventListener('click',closeHelpOverlay);
+if(el.closeHelpXBtn) el.closeHelpXBtn.addEventListener('click',closeHelpOverlay);
 el.viewMoreBtn.addEventListener('click',()=>el.historyOverlay.classList.add('show'));
 el.closeHistoryBtn.addEventListener('click',()=>el.historyOverlay.classList.remove('show'));
 el.victoryNewGameBtn.addEventListener('click',async ()=>{ hideVictory(); clearQuestionHUD(); await startNewGame(); });
@@ -8941,7 +8984,7 @@ el.helpOverlay.addEventListener('click',e=>{ if(e.target===el.helpOverlay) close
 el.historyOverlay.addEventListener('click',e=>{ if(e.target===el.historyOverlay) el.historyOverlay.classList.remove('show'); });
 if(el.leaderboardOverlay) el.leaderboardOverlay.addEventListener('click',e=>{ if(e.target===el.leaderboardOverlay) el.leaderboardOverlay.classList.remove('show'); });
 if(el.audioOverlay) el.audioOverlay.addEventListener('click',e=>{ if(e.target===el.audioOverlay) el.audioOverlay.classList.remove('show'); });
-window.addEventListener('resize',()=>{ updateResponsiveBoardScale(); updateConfigArrow(); });
+window.addEventListener('resize',()=>{ updateResponsiveBoardScale(); updateConfigArrow(); updateSetupButtons(); });
 el.closeQuestionBtn.addEventListener('click',closeQuestion);
 el.questionOverlay.addEventListener('click',e=>{ if(e.target===el.questionOverlay && !el.closeQuestionBtn.disabled && !state.busy) closeQuestion(); });
 [['upBtn','up'],['downBtn','down'],['leftBtn','left'],['rightBtn','right']].forEach(([id,dir])=>el[id].addEventListener('click',()=>handleMove(dir)));
