@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Los Enigmas del Guardián</title>
+  <style>
+    * { box-sizing: border-box; }
+    html, body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+      background: #050403;
+    }
+
+    .index-page {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      background: #050403;
+    }
+
+    .bg-image {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center center;
+      z-index: 0;
+      user-select: none;
+      -webkit-user-drag: none;
+    }
+
+    .shade {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      background:
+        radial-gradient(circle at center, rgba(255, 210, 130, 0.10), transparent 34%),
+        linear-gradient(180deg, rgba(0, 0, 0, 0.18), rgba(0, 0, 0, 0.48));
+      pointer-events: none;
+    }
+
+    .enter-wrap {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+    }
+
+    .enter-btn {
+      min-width: min(72vw, 320px);
+      padding: 22px 38px;
+      border: 2px solid rgba(255, 236, 190, 0.72);
+      border-radius: 999px;
+      color: #24160b;
+      background: linear-gradient(180deg, #ffe7ae, #c99647);
+      font-size: clamp(1.35rem, 5vw, 2.65rem);
+      line-height: 1;
+      font-weight: 1000;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+      box-shadow:
+        0 18px 46px rgba(0, 0, 0, 0.48),
+        0 0 0 8px rgba(255, 218, 135, 0.08),
+        0 0 36px rgba(255, 205, 104, 0.34);
+      transition: transform 0.16s ease, filter 0.16s ease, box-shadow 0.16s ease;
+    }
+
+    .enter-btn:hover,
+    .enter-btn:focus-visible {
+      transform: translateY(-2px) scale(1.03);
+      filter: brightness(1.06);
+      outline: none;
+      box-shadow:
+        0 22px 54px rgba(0, 0, 0, 0.54),
+        0 0 0 11px rgba(255, 218, 135, 0.12),
+        0 0 48px rgba(255, 213, 118, 0.52);
+    }
+
+    .enter-btn:active {
+      transform: translateY(1px) scale(0.99);
+    }
+
+    .index-footer {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 4;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 14px;
+      pointer-events: none;
+    }
+
+    .audio-toggle {
+      pointer-events: auto;
+      min-width: 116px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 236, 190, 0.38);
+      background: rgba(12, 8, 6, 0.68);
+      color: rgba(255, 245, 220, 0.92);
+      font-size: 0.78rem;
+      font-weight: 900;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      cursor: pointer;
+      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.34);
+      transition: transform 0.16s ease, background 0.16s ease, box-shadow 0.16s ease, color 0.16s ease;
+    }
+
+    .audio-toggle:hover,
+    .audio-toggle:focus-visible {
+      transform: translateY(-1px);
+      outline: none;
+      background: rgba(36, 24, 14, 0.84);
+      box-shadow: 0 10px 26px rgba(0, 0, 0, 0.42), 0 0 22px rgba(255, 213, 118, 0.20);
+    }
+
+    .audio-toggle.is-on {
+      color: #25170b;
+      background: linear-gradient(180deg, #ffe7ae, #c99647);
+      border-color: rgba(255, 236, 190, 0.72);
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.40), 0 0 28px rgba(255, 213, 118, 0.36);
+    }
+
+    .audio-warning {
+      position: fixed;
+      left: 50%;
+      bottom: 58px;
+      transform: translateX(-50%);
+      z-index: 5;
+      width: min(92vw, 520px);
+      padding: 9px 12px;
+      border: 1px solid rgba(255, 236, 190, 0.22);
+      border-radius: 999px;
+      background: rgba(0, 0, 0, 0.52);
+      color: rgba(255, 245, 220, 0.88);
+      text-align: center;
+      font-size: 0.78rem;
+      line-height: 1.25;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+    }
+
+    .audio-warning.show {
+      opacity: 1;
+    }
+
+    .video-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: #000;
+      overflow: hidden;
+      cursor: none;
+    }
+
+    .video-overlay.show {
+      display: flex;
+    }
+
+    .opening-video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      background: #000;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+
+    .opening-video.is-visible {
+      opacity: 1;
+    }
+
+    .video-loading {
+      position: relative;
+      z-index: 3;
+      color: rgba(255, 245, 220, 0.88);
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-size: clamp(0.9rem, 3vw, 1.25rem);
+      text-align: center;
+      opacity: 0.9;
+      pointer-events: none;
+    }
+
+    .video-overlay.video-ready .video-loading {
+      display: none;
+    }
+
+    .video-blocker {
+      position: absolute;
+      inset: 0;
+      z-index: 4;
+      background: transparent;
+    }
+
+    /* INDEX v4.3: bloqueo total de barras de desplazamiento */
+    html,
+    body {
+      width: 100vw !important;
+      height: 100dvh !important;
+      max-width: 100vw !important;
+      max-height: 100dvh !important;
+      overflow: hidden !important;
+      overscroll-behavior: none;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      position: fixed;
+      inset: 0;
+    }
+
+    html::-webkit-scrollbar,
+    body::-webkit-scrollbar,
+    .index-page::-webkit-scrollbar,
+    .video-overlay::-webkit-scrollbar {
+      width: 0 !important;
+      height: 0 !important;
+      display: none !important;
+    }
+
+    .index-page,
+    .video-overlay {
+      width: 100vw !important;
+      height: 100dvh !important;
+      max-width: 100vw !important;
+      max-height: 100dvh !important;
+      overflow: hidden !important;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+
+    .bg-image,
+    .opening-video {
+      max-width: 100vw;
+      max-height: 100dvh;
+    }
+
+    @media (max-width: 899px) {
+      .enter-wrap {
+        max-width: 100vw;
+        max-height: 100dvh;
+        padding: clamp(12px, 4vw, 20px);
+      }
+
+      .enter-btn {
+        min-width: min(78vw, 300px);
+        max-width: calc(100vw - 32px);
+      }
+
+      .index-footer {
+        max-width: 100vw;
+        padding-left: max(10px, env(safe-area-inset-left));
+        padding-right: max(10px, env(safe-area-inset-right));
+        padding-bottom: max(10px, env(safe-area-inset-bottom));
+      }
+
+      .audio-warning {
+        max-width: calc(100vw - 22px);
+        bottom: calc(58px + env(safe-area-inset-bottom));
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="index-page" aria-label="Entrada a Los Enigmas del Guardián">
+    <img class="bg-image" src="images/bgindex.jpg" alt="" aria-hidden="true" />
+    <div class="shade" aria-hidden="true"></div>
+
+    <div class="enter-wrap">
+      <button id="enterBtn" class="enter-btn" type="button">ENTRAR</button>
+    </div>
+  </main>
+
+  <footer class="index-footer" aria-label="Controles de audio">
+    <button id="audioToggle" class="audio-toggle" type="button" aria-pressed="false">Audio OFF</button>
+  </footer>
+
+  <div id="audioWarning" class="audio-warning">No se ha podido iniciar el audio. Revisa permisos o vuelve a pulsar el botón.</div>
+
+  <div id="videoOverlay" class="video-overlay" aria-hidden="true">
+    <video id="openingVideo" class="opening-video" preload="metadata" playsinline webkit-playsinline></video>
+    <div id="videoLoading" class="video-loading">Cargando apertura...</div>
+    <div class="video-blocker" aria-hidden="true"></div>
+  </div>
+
+  <audio id="indexMusic" src="audios/indexbg.mp3" preload="auto" loop></audio>
+
+  <script>
+    (function () {
+      'use strict';
+
+      const GAME_URL = 'enigmasguardian.html';
+      const DESKTOP_VIDEO = 'videos/shortopeningH.webm';
+      const MOBILE_VIDEO = 'videos/shortopeningV.webm';
+
+      const enterBtn = document.getElementById('enterBtn');
+      const audioToggle = document.getElementById('audioToggle');
+      const music = document.getElementById('indexMusic');
+      const audioWarning = document.getElementById('audioWarning');
+      const videoOverlay = document.getElementById('videoOverlay');
+      const openingVideo = document.getElementById('openingVideo');
+
+      let audioIsOn = false;
+      let warningTimer = null;
+      let hasStartedVideo = false;
+      let loadFallbackTimer = null;
+      let finishFallbackTimer = null;
+      let stallFallbackTimer = null;
+
+      function isMobileDevice() {
+        const ua = navigator.userAgent || '';
+        const coarsePointer = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
+        const smallScreen = window.matchMedia && window.matchMedia('(max-width: 899px)').matches;
+        const mobileUA = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua);
+        return Boolean(mobileUA || (coarsePointer && smallScreen));
+      }
+
+      function selectedVideoSrc() {
+        return isMobileDevice() ? MOBILE_VIDEO : DESKTOP_VIDEO;
+      }
+
+      function showAudioWarning() {
+        if (!audioWarning) return;
+        audioWarning.classList.add('show');
+        clearTimeout(warningTimer);
+        warningTimer = setTimeout(() => audioWarning.classList.remove('show'), 2800);
+      }
+
+      function updateAudioButton() {
+        audioToggle.textContent = audioIsOn ? 'Audio ON' : 'Audio OFF';
+        audioToggle.classList.toggle('is-on', audioIsOn);
+        audioToggle.setAttribute('aria-pressed', audioIsOn ? 'true' : 'false');
+      }
+
+      async function setAudioOn(nextState) {
+        if (!music) return;
+
+        if (nextState) {
+          music.muted = false;
+          music.volume = 1;
+          try {
+            await music.play();
+            audioIsOn = true;
+          } catch (error) {
+            audioIsOn = false;
+            showAudioWarning();
+          }
+        } else {
+          music.muted = true;
+          audioIsOn = false;
+        }
+
+        updateAudioButton();
+      }
+
+      function clearVideoTimers() {
+        clearTimeout(loadFallbackTimer);
+        clearTimeout(finishFallbackTimer);
+        clearTimeout(stallFallbackTimer);
+      }
+
+      function goToGame() {
+        clearVideoTimers();
+        if (window.parent && window.parent !== window) {
+          window.parent.location.href = GAME_URL;
+        } else {
+          window.location.href = GAME_URL;
+        }
+      }
+
+      function markVideoReady() {
+        videoOverlay.classList.add('video-ready');
+        openingVideo.classList.add('is-visible');
+      }
+
+      function scheduleFinishFallback() {
+        clearTimeout(finishFallbackTimer);
+        const duration = Number(openingVideo.duration);
+        if (Number.isFinite(duration) && duration > 0) {
+          finishFallbackTimer = setTimeout(goToGame, Math.ceil((duration + 2) * 1000));
+        } else {
+          finishFallbackTimer = setTimeout(goToGame, 45000);
+        }
+      }
+
+      async function tryPlayVideo() {
+        try {
+          openingVideo.muted = false;
+          const attempt = openingVideo.play();
+          if (attempt && typeof attempt.catch === 'function') {
+            await attempt;
+          }
+        } catch (error) {
+          try {
+            openingVideo.muted = true;
+            const mutedAttempt = openingVideo.play();
+            if (mutedAttempt && typeof mutedAttempt.catch === 'function') {
+              await mutedAttempt;
+            }
+          } catch (secondError) {
+            goToGame();
+          }
+        }
+      }
+
+      function startOpeningVideo() {
+        if (hasStartedVideo) return;
+        hasStartedVideo = true;
+
+        enterBtn.disabled = true;
+        audioToggle.disabled = true;
+
+        try {
+          if (music) {
+            music.pause();
+            music.currentTime = 0;
+          }
+        } catch (error) {}
+
+        const src = selectedVideoSrc();
+        videoOverlay.classList.add('show');
+        videoOverlay.classList.remove('video-ready');
+        videoOverlay.setAttribute('aria-hidden', 'false');
+        openingVideo.classList.remove('is-visible');
+
+        // Si el navegador no puede reproducir WebM, evitamos quedarse en una pantalla negra.
+        if (openingVideo.canPlayType && !openingVideo.canPlayType('video/webm')) {
+          goToGame();
+          return;
+        }
+
+        clearVideoTimers();
+        loadFallbackTimer = setTimeout(() => {
+          if (!openingVideo.readyState || openingVideo.readyState < 2) {
+            goToGame();
+          }
+        }, 8000);
+
+        openingVideo.src = src;
+        openingVideo.load();
+        tryPlayVideo();
+      }
+
+      audioToggle.addEventListener('click', () => {
+        setAudioOn(!audioIsOn);
+      });
+
+      enterBtn.addEventListener('click', startOpeningVideo);
+
+      openingVideo.addEventListener('loadedmetadata', scheduleFinishFallback);
+      openingVideo.addEventListener('loadeddata', markVideoReady);
+      openingVideo.addEventListener('canplay', markVideoReady);
+      openingVideo.addEventListener('playing', () => {
+        clearTimeout(loadFallbackTimer);
+        markVideoReady();
+        scheduleFinishFallback();
+      });
+      openingVideo.addEventListener('ended', goToGame);
+      openingVideo.addEventListener('error', goToGame);
+      openingVideo.addEventListener('abort', goToGame);
+      openingVideo.addEventListener('stalled', () => {
+        clearTimeout(stallFallbackTimer);
+        stallFallbackTimer = setTimeout(() => {
+          if (openingVideo.paused || openingVideo.readyState < 2) goToGame();
+        }, 6000);
+      });
+      openingVideo.addEventListener('waiting', () => {
+        clearTimeout(stallFallbackTimer);
+        stallFallbackTimer = setTimeout(() => {
+          if (openingVideo.readyState < 2) goToGame();
+        }, 6000);
+      });
+
+      updateAudioButton();
+    })();
+  </script>
+</body>
+</html>
